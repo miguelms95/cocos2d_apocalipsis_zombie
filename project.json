@@ -15,6 +15,7 @@
         "src/GameScene.js",
         "src/Caballero.js",
         "src/Pad.js",
-        "src/ControlesLayer.js"
+        "src/ControlesLayer.js",
+        "src/Llave.js"
     ]
 }

@@ -6,6 +6,8 @@ var res = {
     mapa1_tmx: "res/mapa1.tmx",
     caballero_png: "res/caballero.png",
     caballero_plist: "res/caballero.plist",
+    llaves_plist: "res/llaves.plist",
+    llaves_png: "res/llaves.png",
     pad_png: "res/pad.png"
 };
 
