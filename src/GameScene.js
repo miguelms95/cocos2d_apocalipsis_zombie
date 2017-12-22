@@ -12,8 +12,6 @@ var GameLayer = cc.Layer.extend({
        this.scene = scene;
        var size = cc.winSize;
 
-       new Pad(scene);
-
        cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
 
        // Inicializar Space (sin gravedad)
@@ -28,6 +26,8 @@ var GameLayer = cc.Layer.extend({
 
        this.caballero = new Caballero(this.space,
               cc.p(50,150), this);
+              
+       new Pad(scene, this.caballero);
 
        cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
@@ -59,40 +59,22 @@ var GameLayer = cc.Layer.extend({
 
        this.setPosition(cc.p( - posicionXCamara , - posicionYCamara));
 
-       console.log("Tecla: " + this.tecla);
-
        // izquierda
        if (this.tecla == 65 ){
-            if( this.caballero.body.p.x > 0){
-                this.caballero.moverIzquierda();
-            } else {
-                this.caballero.detener();
-            }
+            this.moverCaballeroIzquierda();
        }
        // derecha
        if (this.tecla == 68 ){
-            if( this.caballero.body.p.x < this.mapaAncho){
-                this.caballero.moverDerecha();
-            } else {
-                this.caballero.detener();
-            }
+            this.moverCaballeroDerecha();
        }
         // arriba
        if (this.tecla == 87 ){
-            if( this.caballero.body.p.y < this.mapaAlto){
-                this.caballero.moverArriba();
-            } else {
-                this.caballero.detener();
-            }
+            this.moverCaballeroArriba();
        }
 
        // abajo
        if (this.tecla == 83 ){
-            if( this.caballero.body.p.y > 0){
-                this.caballero.moverAbajo();
-            } else {
-                this.caballero.detener();
-            }
+           this.moverCaballeroAbajo();
        }
 
 
@@ -146,15 +128,43 @@ var GameLayer = cc.Layer.extend({
            if ( instancia.tecla  == keyCode){
               instancia.tecla = 0;
            }
+    }, moverCaballeroIzquierda: function() {
+        if( this.caballero.body.p.x > 0){
+            this.caballero.moverIzquierda();
+        } else {
+            this.caballero.detener();
+        }
+    }, moverCaballeroDerecha: function() {
+        if( this.caballero.body.p.x < this.mapaAncho){
+            this.caballero.moverDerecha();
+        } else {
+            this.caballero.detener();
+        }
+    }, moverCaballeroArriba: function() {
+        if( this.caballero.body.p.y < this.mapaAlto){
+            this.caballero.moverArriba();
+        } else {
+            this.caballero.detener();
+        }
+    }, moverCaballeroAbajo: function() {
+        if( this.caballero.body.p.y > 0){
+            this.caballero.moverAbajo();
+        } else {
+            this.caballero.detener();
+        }
     }
 });
 
-
+var idCapaJuego = 1;
+var idCapaControles = 2;
 
 var GameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
         var layer = new GameLayer(this);
-        this.addChild(layer);
+        this.addChild(layer, 0, idCapaJuego);
+
+        var controlesLayer = new ControlesLayer(this);
+        this.addChild(controlesLayer, 0, idCapaControles);
     }
 });
