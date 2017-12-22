@@ -1,3 +1,4 @@
+var tipoLlave = 1;
 var GameLayer = cc.Layer.extend({
     caballero: null,
     space: null,
@@ -9,12 +10,12 @@ var GameLayer = cc.Layer.extend({
     pad: null,
     llaves: [],
     scene: null,
-    ctor: function (scene) {
+    ctor: function(scene) {
         this._super();
         this.scene = scene;
         var size = cc.winSize;
 
-       cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
         cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
@@ -40,7 +41,8 @@ var GameLayer = cc.Layer.extend({
 
         return true;
 
-    }, update: function (dt) {
+    },
+    update: function(dt) {
         this.space.step(dt);
 
         var posicionXCamara = this.caballero.body.p.x - this.getContentSize().width / 2;
@@ -62,23 +64,23 @@ var GameLayer = cc.Layer.extend({
 
         this.setPosition(cc.p(-posicionXCamara, -posicionYCamara));
 
-       // izquierda
-       if (this.tecla == 65 || this.orientacionPad == PAD_IZQUIERDA ){
+        // izquierda
+        if (this.tecla == 65 || this.orientacionPad == PAD_IZQUIERDA) {
             this.moverCaballeroIzquierda();
-       }
-       // derecha
-       if (this.tecla == 68 || this.orientacionPad == PAD_DERECHA ){
+        }
+        // derecha
+        if (this.tecla == 68 || this.orientacionPad == PAD_DERECHA) {
             this.moverCaballeroDerecha();
-       }
+        }
         // arriba
-       if (this.tecla == 87 || this.orientacionPad == PAD_ARRIBA ){
+        if (this.tecla == 87 || this.orientacionPad == PAD_ARRIBA) {
             this.moverCaballeroArriba();
-       }
+        }
 
-       // abajo
-       if (this.tecla == 83 || this.orientacionPad == PAD_ABAJO ){
-           this.moverCaballeroAbajo();
-       }
+        // abajo
+        if (this.tecla == 83 || this.orientacionPad == PAD_ABAJO) {
+            this.moverCaballeroAbajo();
+        }
 
         // ninguna pulsada
         if (this.tecla == 0 && this.orientacionPad == 0) {
@@ -86,7 +88,8 @@ var GameLayer = cc.Layer.extend({
         }
 
 
-    }, cargarMapa: function () {
+    },
+    cargarMapa: function() {
         this.mapa = new cc.TMXTiledMap(res.mapa1_tmx);
         // Añadirlo a la Layer
         this.addChild(this.mapa);
@@ -129,34 +132,40 @@ var GameLayer = cc.Layer.extend({
             this.llaves.push(llave);
         }
 
-    }, teclaPulsada: function (keyCode, event) {
+    },
+    teclaPulsada: function(keyCode, event) {
         var instancia = event.getCurrentTarget();
         instancia.tecla = keyCode;
-    }, moverCaballeroIzquierda: function() {
-        if( this.caballero.body.p.x > 0){
+    },
+    moverCaballeroIzquierda: function() {
+        if (this.caballero.body.p.x > 0) {
             this.caballero.moverIzquierda();
         } else {
             this.caballero.detener();
         }
-    }, moverCaballeroDerecha: function() {
-        if( this.caballero.body.p.x < this.mapaAncho){
+    },
+    moverCaballeroDerecha: function() {
+        if (this.caballero.body.p.x < this.mapaAncho) {
             this.caballero.moverDerecha();
         } else {
             this.caballero.detener();
         }
-    }, moverCaballeroArriba: function() {
-        if( this.caballero.body.p.y < this.mapaAlto){
+    },
+    moverCaballeroArriba: function() {
+        if (this.caballero.body.p.y < this.mapaAlto) {
             this.caballero.moverArriba();
         } else {
             this.caballero.detener();
         }
-    }, moverCaballeroAbajo: function() {
-        if( this.caballero.body.p.y > 0){
+    },
+    moverCaballeroAbajo: function() {
+        if (this.caballero.body.p.y > 0) {
             this.caballero.moverAbajo();
         } else {
             this.caballero.detener();
         }
-    }, teclaLevantada: function (keyCode, event) {
+    },
+    teclaLevantada: function(keyCode, event) {
         var instancia = event.getCurrentTarget();
 
         if (instancia.tecla == keyCode) {
@@ -169,7 +178,7 @@ var idCapaJuego = 1;
 var idCapaControles = 2;
 
 var GameScene = cc.Scene.extend({
-    onEnter: function () {
+    onEnter: function() {
         this._super();
         var layer = new GameLayer(this);
         this.addChild(layer, 0, idCapaJuego);
