@@ -35,6 +35,10 @@ var Llave = cc.Class.extend({
 
         // this.shape.setCollisionType(tipoLlave);
 
+        this.sprite.setScaleX(0.3);
+        this.sprite.setScaleY(0.3);
+
+
         // forma estática
         gameLayer.space.addStaticShape(this.shape);
         // ejecutar la animación
