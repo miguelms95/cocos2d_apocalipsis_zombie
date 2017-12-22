@@ -1,8 +1,9 @@
+var PAD_IZQUIERDA = 1;
+var PAD_DERECHA = 2;
+var PAD_ARRIBA = 3;
+var PAD_ABAJO = 4;
+
 var Pad = cc.Class.extend({
-    IZQUIERDA: 1,
-    DERECHA: 2,
-    ARRIBA: 3,
-    DERECHA: 4,
     spritePad: null,
     ctor: function (layer) {
         var size = cc.winSize;
@@ -15,26 +16,24 @@ var Pad = cc.Class.extend({
     },
 
     pulsado: function (posicion) {
-        var x = this.spritePad.getPosition().x;
-        var y = this.spritePad.getPosition().y;
-        var ancho = this.spritePad.ancho;
-        var altura = this.spritePad.altura;
-
         var areaPad = this.spritePad.getBoundingBox();
-
+        var x = areaPad.x + areaPad.width / 2;
+        var y = areaPad.y + areaPad.height / 2;
+        
         if (cc.rectContainsPoint(areaPad, posicion)) {
             if (Math.abs(x - posicion.x) > Math.abs(y - posicion.y)) {
                 if (x - posicion.x > 0) {
-                    return this.IZQUIERDA;
+                    return PAD_IZQUIERDA;
                 }
-                return this.DERECHA;
+                return PAD_DERECHA;
             } else {
                 if (y - posicion.y > 0) {
-                    return this.ABAJO;
+                    return PAD_ABAJO;
                 }
-                return this.ARRIBA;
+                return PAD_ARRIBA;
             }
         }
+
         return 0;
     }
 });

@@ -2,6 +2,7 @@ var GameLayer = cc.Layer.extend({
     caballero: null,
     space: null,
     tecla: 0,
+    orientacionPad: 0,
     mapa: null,
     mapaAncho: 0,
     mapaAlto: 0,
@@ -62,25 +63,25 @@ var GameLayer = cc.Layer.extend({
         this.setPosition(cc.p(-posicionXCamara, -posicionYCamara));
 
        // izquierda
-       if (this.tecla == 65 ){
+       if (this.tecla == 65 || this.orientacionPad == PAD_IZQUIERDA ){
             this.moverCaballeroIzquierda();
        }
        // derecha
-       if (this.tecla == 68 ){
+       if (this.tecla == 68 || this.orientacionPad == PAD_DERECHA ){
             this.moverCaballeroDerecha();
        }
         // arriba
-       if (this.tecla == 87 ){
+       if (this.tecla == 87 || this.orientacionPad == PAD_ARRIBA ){
             this.moverCaballeroArriba();
        }
 
        // abajo
-       if (this.tecla == 83 ){
+       if (this.tecla == 83 || this.orientacionPad == PAD_ABAJO ){
            this.moverCaballeroAbajo();
        }
 
         // ninguna pulsada
-        if (this.tecla == 0) {
+        if (this.tecla == 0 && this.orientacionPad == 0) {
             this.caballero.detener();
         }
 
