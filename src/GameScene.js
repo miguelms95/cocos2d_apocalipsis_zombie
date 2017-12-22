@@ -55,9 +55,10 @@ var GameLayer = cc.Layer.extend({
        this.setPosition(cc.p( - posicionXCamara , - posicionYCamara));
 
 
+       console.log("Tecla: " + this.tecla);
 
        // izquierda
-       if (this.tecla == 37 ){
+       if (this.tecla == 65 ){
             if( this.caballero.body.p.x > 0){
                 this.caballero.moverIzquierda();
             } else {
@@ -65,7 +66,7 @@ var GameLayer = cc.Layer.extend({
             }
        }
        // derecha
-       if (this.tecla == 39 ){
+       if (this.tecla == 68 ){
             if( this.caballero.body.p.x < this.mapaAncho){
                 this.caballero.moverDerecha();
             } else {
@@ -73,7 +74,7 @@ var GameLayer = cc.Layer.extend({
             }
        }
         // arriba
-       if (this.tecla == 38 ){
+       if (this.tecla == 87 ){
             if( this.caballero.body.p.y < this.mapaAlto){
                 this.caballero.moverArriba();
             } else {
@@ -82,7 +83,7 @@ var GameLayer = cc.Layer.extend({
        }
 
        // abajo
-       if (this.tecla == 40 ){
+       if (this.tecla == 83 ){
             if( this.caballero.body.p.y > 0){
                 this.caballero.moverAbajo();
             } else {
