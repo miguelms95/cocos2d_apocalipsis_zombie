@@ -6,11 +6,13 @@ var GameLayer = cc.Layer.extend({
     mapaAncho:0,
     mapaAlto:0,
     pad: null,
-    ctor:function () {
+    scene: null,
+    ctor:function (scene) {
        this._super();
+       this.scene = scene;
        var size = cc.winSize;
 
-       this.pad = new Pad(this);
+       new Pad(scene);
 
        cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
 
@@ -24,7 +26,6 @@ var GameLayer = cc.Layer.extend({
        this.cargarMapa();
        this.scheduleUpdate();
 
-       this.pa
        this.caballero = new Caballero(this.space,
               cc.p(50,150), this);
 
@@ -57,8 +58,6 @@ var GameLayer = cc.Layer.extend({
        }
 
        this.setPosition(cc.p( - posicionXCamara , - posicionYCamara));
-
-       this.pad.y = -posicionYCamara;
 
        console.log("Tecla: " + this.tecla);
 
@@ -155,7 +154,7 @@ var GameLayer = cc.Layer.extend({
 var GameScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        var layer = new GameLayer();
+        var layer = new GameLayer(this);
         this.addChild(layer);
     }
 });
