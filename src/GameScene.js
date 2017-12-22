@@ -6,6 +6,7 @@ var GameLayer = cc.Layer.extend({
     mapaAncho:0,
     mapaAlto:0,
     pad: null,
+    llaves:[],
     ctor:function () {
        this._super();
        var size = cc.winSize;
@@ -13,6 +14,7 @@ var GameLayer = cc.Layer.extend({
        this.pad = new Pad(this);
 
        cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
 
        // Inicializar Space (sin gravedad)
        this.space = new cp.Space();
@@ -136,6 +138,17 @@ var GameLayer = cc.Layer.extend({
                   this.space.addStaticShape(shapeLimite);
               }
         }
+
+        var grupoLlaves = this.mapa.getObjectGroup("llaves");
+        var llavesArray = grupoLlaves.getObjects();
+
+        for (var i = 0; i < llavesArray.length; i++) {
+            var llave = new Llave(this,
+                cc.p(llavesArray[i]["x"],llavesArray[i]["y"]),
+                llavesArray[i]["width"],llavesArray[i]["height"]);
+            this.llaves.push(llave);
+        }
+
     },teclaPulsada: function(keyCode, event){
          var instancia = event.getCurrentTarget();
 
