@@ -2,7 +2,6 @@
     "project_type": "javascript",
 
     "debugMode" : 1,
-    "showFPS" : true,
     "frameRate" : 60,
     "id" : "gameCanvas",
     "renderMode" : 1,
@@ -14,6 +13,7 @@
         "src/resource.js",
         "src/app.js",
         "src/GameScene.js",
-        "src/Caballero.js"
+        "src/Caballero.js",
+        "src/Pad.js"
     ]
 }
