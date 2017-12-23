@@ -23,7 +23,7 @@ var GameLayer = cc.Layer.extend({
         var size = cc.winSize;
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist); <<
+        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist); 
         cc.spriteFrameCache.addSpriteFrames(res.zombie_vertical_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_dcha_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_izqda_plist);
