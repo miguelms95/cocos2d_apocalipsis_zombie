@@ -206,9 +206,7 @@ var GameLayer = cc.Layer.extend({
         shapes[0].llaves++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.colorearLlave();
-        // shapes[0] es el jugador
         this.formasEliminar.push(shapes[1]);
-        this.removeChild(space);
     }
 });
 

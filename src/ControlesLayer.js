@@ -6,9 +6,9 @@ var ControlesLayer = cc.Layer.extend({
         this._super();
         var posActualLlave = 30;
         for (var i = 0; i < llavesNecesarias; i++) {
-            var llave = new ContadorLlave(posActualLlave);
+            var capa = this;
+            var llave = new ContadorLlave(capa, posActualLlave);
             this.llaves.push(llave);
-            this.addChild(llave.sprite);
             posActualLlave = posActualLlave + 27;
         }
 
@@ -53,8 +53,8 @@ var ControlesLayer = cc.Layer.extend({
             gameLayer.orientacionPad = instancia.pad.pulsado(cc.p(event.getLocationX(), event.getLocationY()));
     },
     colorearLlave: function() {
-        for (var i = 0; i < this.llaves.lenght; i++) {
-            if (this.llaves[i].activado == 0) {
+        for (var i = 0; i < this.llaves.length; i++) {
+            if (this.llaves[i].activada == 0) {
                 this.llaves[i].activar();
                 break;
             }
