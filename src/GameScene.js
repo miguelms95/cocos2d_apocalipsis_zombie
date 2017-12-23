@@ -1,6 +1,7 @@
 var llavesNecesarias = 5;
 var vidasJugador = 5;
-var tipoLlave = 1;
+var tipoJugador = 1;
+var tipoLlave = 2;
 var GameLayer = cc.Layer.extend({
     caballero: null,
     space: null,
@@ -22,6 +23,10 @@ var GameLayer = cc.Layer.extend({
 
         // Inicializar Space (sin gravedad)
         this.space = new cp.Space();
+
+        //Colision jugador con llave
+        this.space.addCollisionHandler(tipoJugador, tipoLlave,
+            null, null, this.colisionJugadorConLlave.bind(this), null);
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
          this.addChild(this.depuracion, 10);
@@ -171,6 +176,12 @@ var GameLayer = cc.Layer.extend({
         if (instancia.tecla == keyCode) {
             instancia.tecla = 0;
         }
+    },
+    colisionJugadorConLlave: function(arbiter, space) {
+        this.arbiter.llaves++;
+        var capaControles = this.getParent().getChildByTag(idCapaControles);
+        capaControles.colorearLlave();
+        this.removeChild(space);
     }
 });
 

@@ -10,6 +10,8 @@ var Caballero = cc.Class.extend({
     animacionArriba: null,
     animacionAbajo: null,
     animacion: null, // Actuals
+    llaves: null,
+    vidas: null,
 
     ctor: function(space, posicion, layer) {
         this.space = space;
@@ -36,6 +38,7 @@ var Caballero = cc.Class.extend({
 
         this.shape.setFriction(1);
         this.shape.setElasticity(0);
+        this.shape.setCollisionType(tipoJugador);
 
         // forma dinamica
         this.space.addShape(this.shape);

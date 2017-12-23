@@ -1,9 +1,8 @@
-
 var Llave = cc.Class.extend({
-    gameLayer:null,
-    sprite:null,
-    shape:null,
-    ctor:function (gameLayer, posicion, p_width, p_height) {
+    gameLayer: null,
+    sprite: null,
+    shape: null,
+    ctor: function(gameLayer, posicion, p_width, p_height) {
         this.gameLayer = gameLayer;
 
         // Crear animación
@@ -28,10 +27,11 @@ var Llave = cc.Class.extend({
         // Los cuerpos estáticos nunca se añaden al Space
         var radio = this.sprite.getContentSize().width / 2;
         // forma
-        this.shape = new cp.CircleShape(body, radio , cp.vzero);
+        this.shape = new cp.CircleShape(body, radio, cp.vzero);
 
         // Nunca genera colisiones reales, es como un “fantasma”
         this.shape.setSensor(true);
+        this.shape.setCollisionType(tipoLlave);
 
         // this.shape.setCollisionType(tipoLlave);
 
@@ -44,8 +44,9 @@ var Llave = cc.Class.extend({
         // ejecutar la animación
         this.sprite.runAction(actionAnimacionBucle);
         // añadir sprite a la capa
-        gameLayer.addChild(this.sprite,10);
-    }, eliminar: function (){
+        gameLayer.addChild(this.sprite, 10);
+    },
+    eliminar: function() {
         // quita la forma
         this.gameLayer.space.removeShape(this.shape);
 
