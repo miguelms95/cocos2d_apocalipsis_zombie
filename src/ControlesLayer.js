@@ -3,12 +3,12 @@ var ControlesLayer = cc.Layer.extend({
     llaves: [],
     ctor: function() {
         this._super();
-        var posActualLlave = 10;
+        var posActualLlave = 50;
         for (var i = 0; i < llavesNecesarias; i++) {
             var llave = new ContadorLlave(posActualLlave);
-            posActualLlave = posActualLlave + 20;
-            llaves.push(llave);
-            this.addChild(llave);
+            this.llaves.push(llave);
+            this.addChild(llave.sprite);
+            posActualLlave = posActualLlave + 27;
         }
         this.pad = new Pad(this);
 
