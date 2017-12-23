@@ -1,6 +1,7 @@
 var ControlesLayer = cc.Layer.extend({
     pad: null,
     llaves: [],
+    vidas: [],
     ctor: function() {
         this._super();
         var posActualLlave = 30;
@@ -10,6 +11,16 @@ var ControlesLayer = cc.Layer.extend({
             this.addChild(llave.sprite);
             posActualLlave = posActualLlave + 27;
         }
+
+        var posActualVida = 630;
+        for (var i = 0; i < vidasJugador; i++) {
+            var vida = new ContadorVidas(posActualVida);
+            this.vidas.push(vida);
+            this.addChild(vida.sprite);
+            posActualVida = posActualVida + 35;
+        }
+
+
         this.pad = new Pad(this);
 
         // Registrar Mouse Down

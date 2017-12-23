@@ -17,6 +17,7 @@
         "src/ControlesLayer.js",
         "src/Llave.js",
         "src/Zombie.js",
-        "src/ContadorLlave.js"
+        "src/ContadorLlave.js",
+        "src/ContadorVidas.js"
     ]
 }

@@ -1,4 +1,5 @@
 var llavesNecesarias = 5;
+var vidasJugador = 5;
 var tipoLlave = 1;
 var GameLayer = cc.Layer.extend({
     caballero: null,
