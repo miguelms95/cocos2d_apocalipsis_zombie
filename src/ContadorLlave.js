@@ -2,9 +2,10 @@ var ContadorLlave = cc.Class.extend({
     gameLayer: null,
     sprite: null,
     shape: null,
+    activada: null,
     ctor: function(posicionX) {
         this.sprite = new cc.Sprite(res.llave_gris_png);
-
+        this.activada = 0;
         this.sprite.setPosition(posicionX, 420);
 
 
@@ -14,5 +15,6 @@ var ContadorLlave = cc.Class.extend({
     },
     activar: function() {
         this.sprite = new cc.Sprite(res.llave_activada_png);
+        this.activada = 0;
     }
 });
