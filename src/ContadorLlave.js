@@ -13,9 +13,11 @@ var ContadorLlave = cc.Class.extend({
         this.sprite.setPosition(posicionX, 420);
         this.layer.addChild(this.sprite);
 
+        this.sprite.setScaleX(0.5);
+        this.sprite.setScaleY(0.5);
+
     },
     activar: function() {
-        console.log("Activado")
         this.layer.removeChild(this.sprite);
         this.sprite = new cc.Sprite(res.llave_activada_png);
         this.sprite.setPosition(this.posicionX, 420);
