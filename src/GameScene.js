@@ -67,25 +67,25 @@ var GameLayer = cc.Layer.extend({
         this.setPosition(cc.p(-posicionXCamara, -posicionYCamara));
 
         // izquierda
-        if (this.tecla == 65 || this.orientacionPad == PAD_IZQUIERDA) {
+        if (this.tecla === 65 || this.orientacionPad === PAD_IZQUIERDA) {
             this.moverCaballeroIzquierda();
         }
         // derecha
-        if (this.tecla == 68 || this.orientacionPad == PAD_DERECHA) {
+        if (this.tecla === 68 || this.orientacionPad === PAD_DERECHA) {
             this.moverCaballeroDerecha();
         }
         // arriba
-        if (this.tecla == 87 || this.orientacionPad == PAD_ARRIBA) {
+        if (this.tecla === 87 || this.orientacionPad === PAD_ARRIBA) {
             this.moverCaballeroArriba();
         }
 
         // abajo
-        if (this.tecla == 83 || this.orientacionPad == PAD_ABAJO) {
+        if (this.tecla === 83 || this.orientacionPad === PAD_ABAJO) {
             this.moverCaballeroAbajo();
         }
 
         // ninguna pulsada
-        if (this.tecla == 0 && this.orientacionPad == 0) {
+        if (this.tecla === 0 && this.orientacionPad === 0) {
             this.caballero.detener();
         }
 
