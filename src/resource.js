@@ -9,7 +9,7 @@ var res = {
     llaves_plist: "res/llaves.plist",
     llaves_png: "res/llaves.png",
     llave_gris_png: "res/llave_gris.png",
-    llave_gris_plist: "res/llave_gris.plist",
+    llave_activada_png: "res/llave_activada.png",
     pad_png: "res/pad.png"
 };
 
