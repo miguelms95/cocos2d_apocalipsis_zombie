@@ -13,6 +13,7 @@ var GameLayer = cc.Layer.extend({
     pad: null,
     llaves: [],
     cajasVida: [],
+    formasEliminar: [],
     scene: null,
     ctor: function(scene) {
         this._super();
@@ -93,8 +94,18 @@ var GameLayer = cc.Layer.extend({
         if (this.tecla === 0 && this.orientacionPad === 0) {
             this.caballero.detener();
         }
+        // Eliminar formas:
+        for (var i = 0; i < this.formasEliminar.length; i++) {
+            var shape = this.formasEliminar[i];
 
-
+            for (var i = 0; i < this.llaves.length; i++) {
+                if (this.llaves[i].shape == shape) {
+                    this.llaves[i].eliminar();
+                    this.llaves.splice(i, 1);
+                }
+            }
+        }
+        this.formasEliminar = [];
     },
     cargarMapa: function() {
         this.mapa = new cc.TMXTiledMap(res.mapa1_tmx);
@@ -190,18 +201,14 @@ var GameLayer = cc.Layer.extend({
         }
     },
     colisionJugadorConLlave: function(arbiter, space) {
-<<<<<<< HEAD
-=======
-        console.log("COLISION jugador con LLAVE")
-        // this.arbiter.llaves++;
->>>>>>> 13ad8bfd5754e9e061a1e3be49cc39ea45dd575e
-        this.caballero.llaves++;
+        var shapes = arbiter.getShapes();
+        // shapes[0] es el jugador y shapes[1] es la llave
+        shapes[0].llaves++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.colorearLlave();
-        console.log("llave antes:");
-        console.log(space);
+        // shapes[0] es el jugador
+        this.formasEliminar.push(shapes[1]);
         this.removeChild(space);
-        console.log(space);
     }
 });
 
