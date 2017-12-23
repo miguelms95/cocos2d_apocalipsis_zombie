@@ -8,7 +8,7 @@ var ContadorLlave = cc.Class.extend({
 
         // this.shape.setSensor(true); // Nunca genera colisiones reales, es como un “fantasma”
 
-        this.sprite.setPosition(posicionX, 190);
+        this.sprite.setPosition(posicionX, 420);
 
         this.sprite.setScaleX(0.5);
         this.sprite.setScaleY(0.5);
