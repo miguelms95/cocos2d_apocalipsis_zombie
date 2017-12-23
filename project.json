@@ -1,15 +1,14 @@
 {
     "project_type": "javascript",
+    "debugMode": 1,
+    "frameRate": 60,
+    "id": "gameCanvas",
+    "renderMode": 1,
+    "engineDir": "frameworks/cocos2d-html5",
 
-    "debugMode" : 1,
-    "frameRate" : 60,
-    "id" : "gameCanvas",
-    "renderMode" : 1,
-    "engineDir":"frameworks/cocos2d-html5",
+    "modules": ["cocos2d", "chipmunk"],
 
-    "modules" : ["cocos2d","chipmunk"],
-
-    "jsList" : [
+    "jsList": [
         "src/resource.js",
         "src/app.js",
         "src/GameScene.js",
@@ -17,6 +16,7 @@
         "src/Pad.js",
         "src/ControlesLayer.js",
         "src/Llave.js",
-        "src/Zombie.js"
+        "src/Zombie.js",
+        "src/ContadorLlave.js"
     ]
 }
