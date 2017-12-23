@@ -1,6 +1,7 @@
 var tipoLlave = 1;
 var GameLayer = cc.Layer.extend({
     caballero: null,
+    zombie:null,
     space: null,
     tecla: 0,
     orientacionPad: 0,
@@ -19,6 +20,9 @@ var GameLayer = cc.Layer.extend({
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
         cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.zombie_dcha_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.zombie_izqda_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.zombie_vertical_plist);
 
         // Inicializar Space (sin gravedad)
         this.space = new cp.Space();
@@ -32,6 +36,8 @@ var GameLayer = cc.Layer.extend({
 
         this.caballero = new Caballero(this.space,
             cc.p(50, 150), this);
+        this.zombie = new Zombie(this.space,cc.p(100,170),this);
+
 
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
