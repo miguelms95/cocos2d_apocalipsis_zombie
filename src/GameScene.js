@@ -1,6 +1,8 @@
 var tipoLlave = 1;
 var GameLayer = cc.Layer.extend({
+    orientacion: 0,
     caballero: null,
+    zombie: null,
     space: null,
     tecla: 0,
     orientacionPad: 0,
@@ -10,7 +12,7 @@ var GameLayer = cc.Layer.extend({
     pad: null,
     llaves: [],
     scene: null,
-    ctor: function(scene) {
+    ctor: function (scene) {
         this._super();
         this.scene = scene;
         var size = cc.winSize;
@@ -19,7 +21,11 @@ var GameLayer = cc.Layer.extend({
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
         cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.llave_gris_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.zombie_vertical_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.zombie_dcha_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.zombie_izqda_plist);
+
+        //cc.spriteFrameCache.addSpriteFrames(res.llave_gris_plist);
 
         // Inicializar Space (sin gravedad)
         this.space = new cp.Space();
@@ -34,6 +40,8 @@ var GameLayer = cc.Layer.extend({
         this.caballero = new Caballero(this.space,
             cc.p(50, 150), this);
 
+        this.zombie = new Zombie(this.space, cc.p(1, 250), this);
+
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: this.teclaPulsada,
@@ -43,7 +51,7 @@ var GameLayer = cc.Layer.extend({
         return true;
 
     },
-    update: function(dt) {
+    update: function (dt) {
         this.space.step(dt);
 
         var posicionXCamara = this.caballero.body.p.x - this.getContentSize().width / 2;
@@ -67,20 +75,20 @@ var GameLayer = cc.Layer.extend({
 
         // izquierda
         if (this.tecla === 65 || this.orientacionPad === PAD_IZQUIERDA) {
-            this.moverCaballeroIzquierda();
+            this.moverPersonajeIzquierda(this.caballero);
         }
         // derecha
         if (this.tecla === 68 || this.orientacionPad === PAD_DERECHA) {
-            this.moverCaballeroDerecha();
+            this.moverPersonajeDerecha(this.caballero);
         }
         // arriba
         if (this.tecla === 87 || this.orientacionPad === PAD_ARRIBA) {
-            this.moverCaballeroArriba();
+            this.moverPersonajeArriba(this.caballero);
         }
 
         // abajo
         if (this.tecla === 83 || this.orientacionPad === PAD_ABAJO) {
-            this.moverCaballeroAbajo();
+            this.moverPersonajeAbajo(this.caballero);
         }
 
         // ninguna pulsada
@@ -88,9 +96,29 @@ var GameLayer = cc.Layer.extend({
             this.caballero.detener();
         }
 
+        if (this.zombie.mismaPosicionX()) {
+            this.moverZombieEjeY();
+            this.depurarCordenadas(this.zombie,this.caballero);
+        }
+
+        else if (this.zombie.mismaPosicionY()) {
+            this.moverZombieEjeX();
+            this.depurarCordenadas(this.zombie,this.caballero);
+        }
+
+
+        else if (this.orientacion++ % 2 == 0) {
+            this.moverZombieEjeX();
+            this.depurarCordenadas(this.zombie,this.caballero);
+        }
+
+        else {
+            this.moverZombieEjeY();
+            this.depurarCordenadas(this.zombie,this.caballero);
+        }
 
     },
-    cargarMapa: function() {
+    cargarMapa: function () {
         this.mapa = new cc.TMXTiledMap(res.mapa1_tmx);
         // Añadirlo a la Layer
         this.addChild(this.mapa);
@@ -134,39 +162,63 @@ var GameLayer = cc.Layer.extend({
         }
 
     },
-    teclaPulsada: function(keyCode, event) {
+    teclaPulsada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
         instancia.tecla = keyCode;
     },
-    moverCaballeroIzquierda: function() {
-        if (this.caballero.body.p.x > 0) {
-            this.caballero.moverIzquierda();
+    moverPersonajeIzquierda: function (personaje) {
+        if (personaje.body.p.x > 0) {
+            personaje.moverIzquierda();
         } else {
-            this.caballero.detener();
+            personaje.detener();
         }
     },
-    moverCaballeroDerecha: function() {
-        if (this.caballero.body.p.x < this.mapaAncho) {
-            this.caballero.moverDerecha();
+    moverPersonajeDerecha: function (personaje) {
+        if (personaje.body.p.x < this.mapaAncho) {
+            personaje.moverDerecha();
         } else {
-            this.caballero.detener();
+            personaje.detener();
         }
     },
-    moverCaballeroArriba: function() {
-        if (this.caballero.body.p.y < this.mapaAlto) {
-            this.caballero.moverArriba();
+    moverPersonajeArriba: function (personaje) {
+        if (personaje.body.p.y < this.mapaAlto) {
+            personaje.moverArriba();
         } else {
-            this.caballero.detener();
+            personaje.detener();
         }
     },
-    moverCaballeroAbajo: function() {
-        if (this.caballero.body.p.y > 0) {
-            this.caballero.moverAbajo();
+    moverPersonajeAbajo: function (personaje) {
+        if (personaje.body.p.y > 0) {
+            personaje.moverAbajo();
         } else {
-            this.caballero.detener();
+            personaje.detener();
         }
     },
-    teclaLevantada: function(keyCode, event) {
+    moverZombieEjeY: function () {
+        if (this.zombie.moviendoseAbajo()) {
+            this.moverPersonajeAbajo(this.zombie);
+        }
+        else {
+            this.moverPersonajeArriba(this.zombie);
+        }
+    },
+    moverZombieEjeX: function () {
+
+        if (this.zombie.moviendoseAIzquierda()) {
+            this.moverPersonajeIzquierda(this.zombie);
+        }
+        else
+            this.moverPersonajeDerecha(this.zombie);
+    },
+    depurarCordenadas: function (zom,cab) {
+        console.log("ZOMBIE");
+      console.log("X: "+zom.body.p.x);
+      console.log("Y: "+zom.body.p.y);
+        console.log("CABALLERO");
+        console.log("X: "+cab.body.p.x);
+        console.log("Y: "+cab.body.p.y);
+    },
+    teclaLevantada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
 
         if (instancia.tecla == keyCode) {
@@ -179,7 +231,7 @@ var idCapaJuego = 1;
 var idCapaControles = 2;
 
 var GameScene = cc.Scene.extend({
-    onEnter: function() {
+    onEnter: function () {
         this._super();
         var layer = new GameLayer(this);
         this.addChild(layer, 0, idCapaJuego);

@@ -12,25 +12,22 @@ var Zombie = cc.Class.extend({
         animacion:null,
 
     ctor:function (space, posicion, layer) {
-        var caminandoI = false;
         this.space = space;
         this.layer = layer;
-
-        // Crear Sprite - Cuerpo y forma
-        if(posicion.x > layer.caballero.body.p.x) {
-            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-I.png");
-            caminandoI = true;
-        }
-        else {
-            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-D.png");
-            caminandoI = false;
-        }
-        // Cuerpo dinamico, SI le afectan las fuerzas
         this.body = new cp.Body(5, Infinity);
 
         this.body.setPos(posicion);
         //body.w_limit = 0.02;
         this.body.setAngle(0);
+
+        // Crear Sprite - Cuerpo y forma
+        if(this.moviendoseAIzquierda()) {
+            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-I.png");
+        }
+        else {
+            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-D.png");
+        }
+
         this.sprite.setBody(this.body);
 
         // Se añade el cuerpo al espacio
@@ -43,9 +40,12 @@ var Zombie = cc.Class.extend({
 
         this.shape.setFriction(1);
         this.shape.setElasticity(0);
+        this.shape.setSensor(true);
 
         // forma dinamica
         this.space.addShape(this.shape);
+
+        // Cuerpo dinamico, SI le afectan las fuerzas
 
         // Crear animación - derecha
         var framesAnimacion = [];
@@ -93,7 +93,7 @@ var Zombie = cc.Class.extend({
 
 
         // ejecutar la animación
-        if(caminandoI){
+        if(this.moviendoseAIzquierda()){
             this.sprite.runAction(this.animacionIzquierda);
             this.animacion = this.animacionIzquierda;
         }
@@ -115,7 +115,6 @@ var Zombie = cc.Class.extend({
         if ( this.body.vx > -100){
             this.body.applyImpulse(cp.v(-100, 0), cp.v(0, 0));
         }
-
     }, moverDerecha:function() {
         if (this.animacion != this.animacionDerecha){
             this.sprite.stopAllActions();
@@ -124,10 +123,9 @@ var Zombie = cc.Class.extend({
         }
 
         this.body.vy = 0;
-        if ( this.body.vx < 100){
+        if ( this.body.vx < 100) {
             this.body.applyImpulse(cp.v(100, 0), cp.v(0, 0));
         }
-
     }, moverArriba:function() {
         if (this.animacion != this.animacionArriba){
             this.sprite.stopAllActions();
@@ -153,13 +151,23 @@ var Zombie = cc.Class.extend({
         }
 
     }, detener : function() {
-        if (this.animacion != this.animacionQuieto){
             this.sprite.stopAllActions();
-            this.animacion = this.animacionQuieto;
             this.sprite.runAction(this.animacion);
-        }
+
 
         this.body.vx = 0;
         this.body.vy = 0;
+    },
+    moviendoseAIzquierda : function () {
+        return  this.body.p.x > this.layer.caballero.body.p.x;
+    },
+    moviendoseAbajo : function () {
+        return this.body.p.y > this.layer.caballero.body.p.y;
+    },
+    mismaPosicionX : function () {
+        return Math.round(this.body.p.x) == Math.round(this.layer.caballero.body.p.x);
+    },
+    mismaPosicionY : function () {
+        return Math.round(this.body.p.y) == Math.round(this.layer.caballero.body.p.y);
     }
 });
