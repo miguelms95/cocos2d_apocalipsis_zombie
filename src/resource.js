@@ -8,6 +8,8 @@ var res = {
     caballero_plist: "res/caballero.plist",
     llaves_plist: "res/llaves.plist",
     llaves_png: "res/llaves.png",
+    llave_gris_png: "res/llave_gris.png",
+    llave_gris_plist: "res/llave_gris.plist",
     pad_png: "res/pad.png"
 };
 
