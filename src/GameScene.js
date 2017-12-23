@@ -12,7 +12,7 @@ var GameLayer = cc.Layer.extend({
     mapaAlto: 0,
     pad: null,
     llaves: [],
-    cajasVida:[],
+    cajasVida: [],
     scene: null,
     ctor: function(scene) {
         this._super();
@@ -190,7 +190,7 @@ var GameLayer = cc.Layer.extend({
         }
     },
     colisionJugadorConLlave: function(arbiter, space) {
-        this.arbiter.llaves++;
+        this.caballero.llaves++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.colorearLlave();
         this.removeChild(space);
