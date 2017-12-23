@@ -14,7 +14,9 @@ var res = {
     zombie_izqda_plist: "res/zombieIzqda.plist",
     zombie_izqda_png: "res/zombieIzqda.png",
     zombie_vertical_plist:"res/zombieVertical.plist",
-    zombie_vertical_png:"res/zombieVertical.png"
+    zombie_vertical_png:"res/zombieVertical.png",
+    llave_gris_png: "res/llave_gris.png",
+    llave_gris_plist: "res/llave_gris.plist",
 };
 
 var g_resources = [];
