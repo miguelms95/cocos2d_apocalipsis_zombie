@@ -17,6 +17,7 @@
         "src/Pad.js",
         "src/ControlesLayer.js",
         "src/Llave.js",
-        "src/Zombie.js"
+        "src/Zombie.js",
+        "src/ContadorLlave.js"
     ]
 }

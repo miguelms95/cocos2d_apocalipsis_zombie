@@ -1,5 +1,5 @@
 
-var ContadorLLave = cc.Class.extend({
+var ContadorLlave = cc.Class.extend({
     gameLayer:null,
     sprite:null,
     shape:null,
@@ -8,7 +8,7 @@ var ContadorLLave = cc.Class.extend({
 
         // this.shape.setSensor(true); // Nunca genera colisiones reales, es como un “fantasma”
 
-        this.spritePad.setPosition(posicionX, 190);
+        this.sprite.setPosition(posicionX, 190);
 
         this.sprite.setScaleX(0.5);
         this.sprite.setScaleY(0.5);

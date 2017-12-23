@@ -7,7 +7,7 @@ var ControlesLayer = cc.Layer.extend({
         for (var i = 0; i < llavesNecesarias; i++) {
             var llave = new ContadorLlave(posActualLlave);
             posActualLlave = posActualLlave + 20;
-            llaves[i] = llave;
+            llaves.push(llave);
             this.addChild(llave);
         }
         this.pad = new Pad(this);
