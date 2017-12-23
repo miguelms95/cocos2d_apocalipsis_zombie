@@ -7,57 +7,57 @@
 			<key>caja_vida_1.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,0},{87,87}}</string>
+				<string>{{0,30},{29,29}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false/>
 				<key>sourceColorRect</key>
-				<string>{{0,0},{87,87}}</string>
+				<string>{{0,0},{29,29}}</string>
 				<key>sourceSize</key>
-				<string>{87,87}</string>
+				<string>{29,29}</string>
 			</dict>
 
 			<key>caja_vida_2.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,88},{87,87}}</string>
+				<string>{{30,0},{29,29}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false/>
 				<key>sourceColorRect</key>
-				<string>{{0,0},{87,87}}</string>
+				<string>{{0,0},{29,29}}</string>
 				<key>sourceSize</key>
-				<string>{87,87}</string>
+				<string>{29,29}</string>
 			</dict>
 
 			<key>caja_vida_3.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{88,0},{87,87}}</string>
+				<string>{{0,0},{29,29}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false/>
 				<key>sourceColorRect</key>
-				<string>{{0,0},{87,87}}</string>
+				<string>{{0,0},{29,29}}</string>
 				<key>sourceSize</key>
-				<string>{87,87}</string>
+				<string>{29,29}</string>
 			</dict>
 
 			<key>caja_vida_4.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{0,88},{87,87}}</string>
+				<string>{{30,0},{29,29}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
 				<false/>
 				<key>sourceColorRect</key>
-				<string>{{0,0},{87,87}}</string>
+				<string>{{0,0},{29,29}}</string>
 				<key>sourceSize</key>
-				<string>{87,87}</string>
+				<string>{29,29}</string>
 			</dict>
 
 		</dict>
@@ -67,7 +67,7 @@
 			<key>format</key>
 			<integer>2</integer>
 			<key>size</key>
-			<string>{256,256}</string>
+			<string>{64,64}</string>
 			<key>textureFileName</key>
 			<string>caja_vida.png</string>
 			</dict>
