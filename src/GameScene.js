@@ -1,4 +1,7 @@
-var tipoLlave = 1;
+var llavesNecesarias = 5;
+var vidasJugador = 5;
+var tipoJugador = 1;
+var tipoLlave = 2;
 var GameLayer = cc.Layer.extend({
     orientacion: 0,
     caballero: null,
@@ -11,6 +14,8 @@ var GameLayer = cc.Layer.extend({
     mapaAlto: 0,
     pad: null,
     llaves: [],
+    cajasVida: [],
+    formasEliminar: [],
     scene: null,
     ctor: function (scene) {
         this._super();
@@ -18,17 +23,20 @@ var GameLayer = cc.Layer.extend({
         var size = cc.winSize;
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
-
-        cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist); <<
         cc.spriteFrameCache.addSpriteFrames(res.zombie_vertical_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_dcha_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_izqda_plist);
 
         //cc.spriteFrameCache.addSpriteFrames(res.llave_gris_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.caja_vida_plist); 
 
         // Inicializar Space (sin gravedad)
         this.space = new cp.Space();
+
+        //Colision jugador con llave
+        this.space.addCollisionHandler(tipoJugador, tipoLlave,
+            null, null, this.colisionJugadorConLlave.bind(this), null);
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
          this.addChild(this.depuracion, 10);
@@ -95,28 +103,32 @@ var GameLayer = cc.Layer.extend({
         if (this.tecla === 0 && this.orientacionPad === 0) {
             this.caballero.detener();
         }
+        // Eliminar formas:
+        for (var i = 0; i < this.formasEliminar.length; i++) {
+            var shape = this.formasEliminar[i];
 
-        if (this.zombie.mismaPosicionX()) {
-            this.moverZombieEjeY();
-            this.depurarCordenadas(this.zombie,this.caballero);
+            if (this.zombie.mismaPosicionX()) {
+                this.moverZombieEjeY();
+                this.depurarCordenadas(this.zombie, this.caballero);
+            } else if (this.zombie.mismaPosicionY()) {
+                this.moverZombieEjeX();
+                this.depurarCordenadas(this.zombie, this.caballero);
+            } else if (this.orientacion++ % 2 == 0) {
+                this.moverZombieEjeX();
+                this.depurarCordenadas(this.zombie, this.caballero);
+            } else {
+                this.moverZombieEjeY();
+                this.depurarCordenadas(this.zombie, this.caballero);
+            }
+
+            for (var i = 0; i < this.llaves.length; i++) {
+                if (this.llaves[i].shape == shape) {
+                    this.llaves[i].eliminar();
+                    this.llaves.splice(i, 1);
+                }
+            }
         }
-
-        else if (this.zombie.mismaPosicionY()) {
-            this.moverZombieEjeX();
-            this.depurarCordenadas(this.zombie,this.caballero);
-        }
-
-
-        else if (this.orientacion++ % 2 == 0) {
-            this.moverZombieEjeX();
-            this.depurarCordenadas(this.zombie,this.caballero);
-        }
-
-        else {
-            this.moverZombieEjeY();
-            this.depurarCordenadas(this.zombie,this.caballero);
-        }
-
+        this.formasEliminar = [];
     },
     cargarMapa: function () {
         this.mapa = new cc.TMXTiledMap(res.mapa1_tmx);
@@ -161,6 +173,16 @@ var GameLayer = cc.Layer.extend({
             this.llaves.push(llave);
         }
 
+        var grupoCajasVida = this.mapa.getObjectGroup("cajasvida");
+        var cajaVidasArray = grupoCajasVida.getObjects();
+
+        for (var i = 0; i < cajaVidasArray.length; i++) {
+            var estaCajaVida = new CajaVida(this,
+                cc.p(cajaVidasArray[i]["x"], cajaVidasArray[i]["y"]),
+                cajaVidasArray[i]["width"], cajaVidasArray[i]["height"]);
+            this.cajasVida.push(estaCajaVida);
+        }
+
     },
     teclaPulsada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
@@ -197,8 +219,7 @@ var GameLayer = cc.Layer.extend({
     moverZombieEjeY: function () {
         if (this.zombie.moviendoseAbajo()) {
             this.moverPersonajeAbajo(this.zombie);
-        }
-        else {
+        } else {
             this.moverPersonajeArriba(this.zombie);
         }
     },
@@ -206,17 +227,16 @@ var GameLayer = cc.Layer.extend({
 
         if (this.zombie.moviendoseAIzquierda()) {
             this.moverPersonajeIzquierda(this.zombie);
-        }
-        else
+        } else
             this.moverPersonajeDerecha(this.zombie);
     },
-    depurarCordenadas: function (zom,cab) {
+    depurarCordenadas: function (zom, cab) {
         console.log("ZOMBIE");
-      console.log("X: "+zom.body.p.x);
-      console.log("Y: "+zom.body.p.y);
+        console.log("X: " + zom.body.p.x);
+        console.log("Y: " + zom.body.p.y);
         console.log("CABALLERO");
-        console.log("X: "+cab.body.p.x);
-        console.log("Y: "+cab.body.p.y);
+        console.log("X: " + cab.body.p.x);
+        console.log("Y: " + cab.body.p.y);
     },
     teclaLevantada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
@@ -224,6 +244,14 @@ var GameLayer = cc.Layer.extend({
         if (instancia.tecla == keyCode) {
             instancia.tecla = 0;
         }
+    },
+    colisionJugadorConLlave: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+        // shapes[0] es el jugador y shapes[1] es la llave
+        shapes[0].llaves++;
+        var capaControles = this.getParent().getChildByTag(idCapaControles);
+        capaControles.colorearLlave();
+        this.formasEliminar.push(shapes[1]);
     }
 });
 

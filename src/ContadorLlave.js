@@ -1,25 +1,29 @@
-
-var ContadorLLave = cc.Class.extend({
-    gameLayer:null,
-    sprite:null,
-    shape:null,
-    ctor:function (posicion, p_width, p_height) {
+var ContadorLlave = cc.Class.extend({
+    gameLayer: null,
+    sprite: null,
+    shape: null,
+    activada: null,
+    posicionX: null,
+    layer: null,
+    ctor: function(layer, posicionX) {
+        this.layer = layer;
+        this.posicionX = posicionX;
         this.sprite = new cc.Sprite(res.llave_gris_png);
+        this.activada = 0;
+        this.sprite.setPosition(posicionX, 420);
+        this.layer.addChild(this.sprite);
 
-        this.shape.setSensor(true); // Nunca genera colisiones reales, es como un “fantasma”
+        this.sprite.setScaleX(0.5);
+        this.sprite.setScaleY(0.5);
 
-        this.sprite.setScaleX(0.3);
-        this.sprite.setScaleY(0.3);
-
-    }, eliminar: function (){
-        // quita la forma
-        this.gameLayer.space.removeShape(this.shape);
-
-        // quita el cuerpo *opcional, funciona igual
-        // NO: es un cuerpo estático, no lo añadimos, no se puede quitar.
-        // this.gameLayer.space.removeBody(shape.getBody());
-
-        // quita el sprite
-        this.gameLayer.removeChild(this.sprite);
+    },
+    activar: function() {
+        this.layer.removeChild(this.sprite);
+        this.sprite = new cc.Sprite(res.llave_activada_png);
+        this.sprite.setPosition(this.posicionX, 420);
+        this.sprite.setScaleX(0.5);
+        this.sprite.setScaleY(0.5);
+        this.activada = 1;
+        this.layer.addChild(this.sprite);
     }
 });

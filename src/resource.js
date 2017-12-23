@@ -15,8 +15,12 @@ var res = {
     zombie_izqda_png: "res/zombieIzqda.png",
     zombie_vertical_plist:"res/zombieVertical.plist",
     zombie_vertical_png:"res/zombieVertical.png",
-    //llave_gris_png: "res/llave_gris.png",
-    //llave_gris_plist: "res/llave_gris.plist",
+    llave_gris_png: "res/llave_gris.png",
+    llave_activada_png: "res/llave_activada.png",
+    vida_png: "res/vida.png",
+    vida_punto_png: "res/vida_punto.png",
+    caja_vida_plist: "res/caja_vida.plist",
+    caja_vida_png: "res/caja_vida.png"
 };
 
 var g_resources = [];
