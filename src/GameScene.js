@@ -190,10 +190,15 @@ var GameLayer = cc.Layer.extend({
         }
     },
     colisionJugadorConLlave: function(arbiter, space) {
-        this.arbiter.llaves++;
+        console.log("COLISION jugador con LLAVE")
+        // this.arbiter.llaves++;
+        this.caballero.llaves++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.colorearLlave();
+        console.log("llave antes:");
+        console.log(space);
         this.removeChild(space);
+        console.log(space);
     }
 });
 

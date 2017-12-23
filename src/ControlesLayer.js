@@ -53,9 +53,9 @@ var ControlesLayer = cc.Layer.extend({
             gameLayer.orientacionPad = instancia.pad.pulsado(cc.p(event.getLocationX(), event.getLocationY()));
     },
     colorearLlave: function() {
-        for (var i = 0; i < llaves.lenght; i++) {
-            if (llaves[i].activado == 0) {
-                llaves[i].activar();
+        for (var i = 0; i < this.llaves.lenght; i++) {
+            if (this.llaves[i].activado == 0) {
+                this.llaves[i].activar();
                 break;
             }
         }
