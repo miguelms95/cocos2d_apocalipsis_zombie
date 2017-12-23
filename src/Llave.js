@@ -33,8 +33,8 @@ var Llave = cc.Class.extend({
         this.shape.setSensor(false);
         this.shape.setCollisionType(tipoLlave);
 
-        this.sprite.setScaleX(0.3);
-        this.sprite.setScaleY(0.3);
+        // this.sprite.setScaleX(0.3);
+        // this.sprite.setScaleY(0.3);
 
 
         // forma estática

@@ -35,8 +35,8 @@ var CajaVida = cc.Class.extend({
 
         // this.shape.setCollisionType(tipoLlave);
 
-        this.sprite.setScaleX(0.25);
-        this.sprite.setScaleY(0.25);
+        // this.sprite.setScaleX(0.25);
+        // this.sprite.setScaleY(0.25);
 
 
         // forma estática
