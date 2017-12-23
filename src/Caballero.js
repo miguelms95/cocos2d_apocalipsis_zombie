@@ -9,8 +9,7 @@ var Caballero = cc.Class.extend({
     animacionIzquierda: null,
     animacionArriba: null,
     animacionAbajo: null,
-    animacion: null, // Actual
-    llaves: null,
+    animacion: null, // Actuals
 
     ctor: function(space, posicion, layer) {
         this.space = space;

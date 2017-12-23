@@ -1,9 +1,15 @@
 var ControlesLayer = cc.Layer.extend({
     pad: null,
-    ctor: function () {
+    llaves: [],
+    ctor: function() {
         this._super();
-        var size = cc.winSize;
-
+        var posActualLlave = 10;
+        for (var i = 0; i < llavesNecesarias; i++) {
+            var llave = new ContadorLlave(posActualLlave);
+            posActualLlave = posActualLlave + 20;
+            llaves[i] = llave;
+            this.addChild(llave);
+        }
         this.pad = new Pad(this);
 
         // Registrar Mouse Down
@@ -17,22 +23,22 @@ var ControlesLayer = cc.Layer.extend({
         this.scheduleUpdate();
         return true;
     },
-    procesarMouseDown: function (event) {
+    procesarMouseDown: function(event) {
         var instancia = event.getCurrentTarget();
         var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
         var posicion = cc.p(event.getLocationX(), event.getLocationY());
         gameLayer.orientacionPad = instancia.pad.pulsado(posicion);
     },
-    procesarMouseUp: function (event) {
+    procesarMouseUp: function(event) {
         var instancia = event.getCurrentTarget();
         var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
         gameLayer.orientacionPad = 0;
     },
-    procesarMouseMove: function (event) {
+    procesarMouseMove: function(event) {
         var instancia = event.getCurrentTarget();
         var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
 
-        if (gameLayer.orientacionPad != 0) 
+        if (gameLayer.orientacionPad != 0)
             gameLayer.orientacionPad = instancia.pad.pulsado(cc.p(event.getLocationX(), event.getLocationY()));
     }
 });
