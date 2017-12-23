@@ -16,6 +16,7 @@
         "src/Caballero.js",
         "src/Pad.js",
         "src/ControlesLayer.js",
-        "src/Llave.js"
+        "src/Llave.js",
+        "src/Zombie.js"
     ]
 }

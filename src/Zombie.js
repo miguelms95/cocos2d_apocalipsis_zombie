@@ -1,23 +1,30 @@
-var Caballero = cc.Class.extend({
-    space: null,
-    sprite: null,
-    shape: null,
-    body: null,
-    layer: null,
-    animacionQuieto: null,
-    animacionDerecha: null,
-    animacionIzquierda: null,
-    animacionArriba: null,
-    animacionAbajo: null,
-    animacion: null, // Actuals
+var Zombie = cc.Class.extend({
+    space:null,
+        sprite:null,
+        shape:null,
+        body:null,
+        layer:null,
+        animacionQuieto:null,
+        animacionDerecha:null,
+        animacionIzquierda:null,
+        animacionArriba:null,
+        animacionAbajo:null,
+        animacion:null,
 
-    ctor: function(space, posicion, layer) {
+    ctor:function (space, posicion, layer) {
+        var caminandoI = false;
         this.space = space;
         this.layer = layer;
-        this.llaves = 0;
 
         // Crear Sprite - Cuerpo y forma
-        this.sprite = new cc.PhysicsSprite("#caballero_quieto_01.png");
+        if(posicion.x > layer.caballero.body.p.x) {
+            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-I.png");
+            caminandoI = true;
+        }
+        else {
+            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-D.png");
+            caminandoI = false;
+        }
         // Cuerpo dinamico, SI le afectan las fuerzas
         this.body = new cp.Body(5, Infinity);
 
@@ -40,21 +47,10 @@ var Caballero = cc.Class.extend({
         // forma dinamica
         this.space.addShape(this.shape);
 
-        // Crear animación - quieto
-        var framesAnimacion = [];
-        for (var i = 1; i <= 2; i++) {
-            var str = "caballero_quieto_0" + i + ".png";
-            var frame = cc.spriteFrameCache.getSpriteFrame(str);
-            framesAnimacion.push(frame);
-        }
-        var animacion = new cc.Animation(framesAnimacion, 0.2);
-        this.animacionQuieto =
-            new cc.RepeatForever(new cc.Animate(animacion));
-
         // Crear animación - derecha
         var framesAnimacion = [];
-        for (var i = 1; i <= 2; i++) {
-            var str = "caballero_derecha_0" + i + ".png";
+        for (var i = 1; i <= 3; i++) {
+            var str = "Zombi-Camina-" + i + "-D.png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             framesAnimacion.push(frame);
         }
@@ -64,8 +60,8 @@ var Caballero = cc.Class.extend({
 
         // Crear animación - izquierda
         var framesAnimacion = [];
-        for (var i = 1; i <= 2; i++) {
-            var str = "caballero_izquierda_0" + i + ".png";
+        for (var i = 1; i <= 3; i++) {
+            var str = "Zombi-Camina-" + i + "-I.png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             framesAnimacion.push(frame);
         }
@@ -75,8 +71,8 @@ var Caballero = cc.Class.extend({
 
         // Crear animación - arriba
         var framesAnimacion = [];
-        for (var i = 1; i <= 2; i++) {
-            var str = "caballero_arriba_0" + i + ".png";
+        for (var i = 1; i <= 3; i++) {
+            var str = "Zombi-Giro-" + i + ".png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             framesAnimacion.push(frame);
         }
@@ -86,8 +82,8 @@ var Caballero = cc.Class.extend({
 
         // Crear animación - abajo
         var framesAnimacion = [];
-        for (var i = 1; i <= 2; i++) {
-            var str = "caballero_abajo_0" + i + ".png";
+        for (var i = 1; i <= 3; i++) {
+            var str = "Zombi-Giro-" + i + ".png";
             var frame = cc.spriteFrameCache.getSpriteFrame(str);
             framesAnimacion.push(frame);
         }
@@ -97,65 +93,67 @@ var Caballero = cc.Class.extend({
 
 
         // ejecutar la animación
-        this.sprite.runAction(this.animacionQuieto);
-        this.animacion = this.animacionQuieto;
-        layer.addChild(this.sprite, 10);
+        if(caminandoI){
+            this.sprite.runAction(this.animacionIzquierda);
+            this.animacion = this.animacionIzquierda;
+        }
+        else{
+            this.sprite.runAction(this.animacionDerecha);
+            this.animacion = this.animacionDerecha;
+        }
 
-    },
-    moverIzquierda: function() {
-        if (this.animacion != this.animacionIzquierda) {
+        layer.addChild(this.sprite,10);
+
+    }, moverIzquierda:function() {
+        if (this.animacion != this.animacionIzquierda){
             this.sprite.stopAllActions();
             this.animacion = this.animacionIzquierda;
             this.sprite.runAction(this.animacion);
         }
 
         this.body.vy = 0;
-        if (this.body.vx > -100) {
+        if ( this.body.vx > -100){
             this.body.applyImpulse(cp.v(-100, 0), cp.v(0, 0));
         }
 
-    },
-    moverDerecha: function() {
-        if (this.animacion != this.animacionDerecha) {
+    }, moverDerecha:function() {
+        if (this.animacion != this.animacionDerecha){
             this.sprite.stopAllActions();
             this.animacion = this.animacionDerecha;
             this.sprite.runAction(this.animacion);
         }
 
         this.body.vy = 0;
-        if (this.body.vx < 100) {
+        if ( this.body.vx < 100){
             this.body.applyImpulse(cp.v(100, 0), cp.v(0, 0));
         }
 
-    },
-    moverArriba: function() {
-        if (this.animacion != this.animacionArriba) {
+    }, moverArriba:function() {
+        if (this.animacion != this.animacionArriba){
             this.sprite.stopAllActions();
             this.animacion = this.animacionArriba;
             this.sprite.runAction(this.animacion);
         }
 
         this.body.vx = 0;
-        if (this.body.vy < 100) {
+        if ( this.body.vy < 100){
             this.body.applyImpulse(cp.v(0, 100), cp.v(0, 0));
         }
 
-    },
-    moverAbajo: function() {
-        if (this.animacion != this.animacionAbajo) {
+    }, moverAbajo:function() {
+        if (this.animacion != this.animacionAbajo){
             this.sprite.stopAllActions();
             this.animacion = this.animacionAbajo;
             this.sprite.runAction(this.animacion);
         }
 
         this.body.vx = 0;
-        if (this.body.vy > -100) {
+        if ( this.body.vy > -100){
             this.body.applyImpulse(cp.v(0, -100), cp.v(0, 0));
         }
 
-    },
-    detener: function() {
-        if (this.animacion != this.animacionQuieto) {
+    }, detener : function() {
+        if (this.animacion != this.animacionQuieto){
             this.sprite.stopAllActions();
             this.animacion = this.animacionQuieto;
             this.sprite.runAction(this.animacion);
