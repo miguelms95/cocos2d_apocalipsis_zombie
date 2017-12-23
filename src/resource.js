@@ -18,7 +18,9 @@ var res = {
     llave_gris_png: "res/llave_gris.png",
     llave_activada_png: "res/llave_activada.png",
     vida_png: "res/vida.png",
-    vida_punto_png: "res/vida_punto.png"
+    vida_punto_png: "res/vida_punto.png",
+    caja_vida_plist: "res/caja_vida.plist",
+    caja_vida_png: "res/caja_vida.png"
 };
 
 var g_resources = [];

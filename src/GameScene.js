@@ -11,6 +11,7 @@ var GameLayer = cc.Layer.extend({
     mapaAlto: 0,
     pad: null,
     llaves: [],
+    cajasVida:[],
     scene: null,
     ctor: function(scene) {
         this._super();
@@ -19,6 +20,7 @@ var GameLayer = cc.Layer.extend({
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
         cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.caja_vida_plist);
 
         // Inicializar Space (sin gravedad)
         this.space = new cp.Space();
@@ -130,6 +132,16 @@ var GameLayer = cc.Layer.extend({
                 cc.p(llavesArray[i]["x"], llavesArray[i]["y"]),
                 llavesArray[i]["width"], llavesArray[i]["height"]);
             this.llaves.push(llave);
+        }
+
+        var grupoCajasVida = this.mapa.getObjectGroup("cajasvida");
+        var cajaVidasArray = grupoCajasVida.getObjects();
+
+        for (var i = 0; i < cajaVidasArray.length; i++) {
+            var estaCajaVida = new CajaVida(this,
+                cc.p(cajaVidasArray[i]["x"], cajaVidasArray[i]["y"]),
+                cajaVidasArray[i]["width"], cajaVidasArray[i]["height"]);
+            this.cajasVida.push(estaCajaVida);
         }
 
     },
