@@ -17,6 +17,7 @@ var GameLayer = cc.Layer.extend({
     cajasVida: [],
     formasEliminar: [],
     scene: null,
+    circuloVision:null,
     ctor: function (scene) {
         this._super();
         this.scene = scene;
@@ -50,6 +51,8 @@ var GameLayer = cc.Layer.extend({
 
         this.zombie = new Zombie(this.space, cc.p(1, 250), this);
 
+        this.circuloVision = new CirculoVision(this);
+  
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: this.teclaPulsada,
@@ -61,9 +64,11 @@ var GameLayer = cc.Layer.extend({
     },
     update: function (dt) {
         this.space.step(dt);
-
+ 
         var posicionXCamara = this.caballero.body.p.x - this.getContentSize().width / 2;
         var posicionYCamara = this.caballero.body.p.y - this.getContentSize().height / 2;
+
+        this.circuloVision.mover(this.caballero);
 
         if (posicionXCamara < 0) {
             posicionXCamara = 0;

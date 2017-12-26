@@ -4,6 +4,7 @@ var ControlesLayer = cc.Layer.extend({
     vidas: [],
     ctor: function() {
         this._super();
+        var size = cc.winSize;
         var posActualLlave = 30;
         for (var i = 0; i < llavesNecesarias; i++) {
             var capa = this;
@@ -29,7 +30,7 @@ var ControlesLayer = cc.Layer.extend({
             onMouseDown: this.procesarMouseDown,
             onMouseMove: this.procesarMouseMove,
             onMouseUp: this.procesarMouseUp,
-        }, this)
+        }, this);
 
         this.scheduleUpdate();
         return true;

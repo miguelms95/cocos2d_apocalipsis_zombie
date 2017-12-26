@@ -19,6 +19,7 @@
         "src/Zombie.js",
         "src/ContadorLlave.js",
         "src/ContadorVidas.js",
-        "src/CajaVida.js"
+        "src/CajaVida.js",
+        "src/CirculoVision.js"
     ]
 }
