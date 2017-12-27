@@ -9,6 +9,7 @@ var Caballero = cc.Class.extend({
     animacionIzquierda: null,
     animacionArriba: null,
     animacionAbajo: null,
+    multVelocidad:null,
     animacion: null, // Actuals
     llaves: null,
     vidas: null,
@@ -18,6 +19,7 @@ var Caballero = cc.Class.extend({
         this.layer = layer;
         this.llaves = 0;
         this.vidas = vidasJugador;
+        this.multVelocidad = 1.0;
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite("#caballero_quieto_01.png");
@@ -114,8 +116,8 @@ var Caballero = cc.Class.extend({
         }
 
         this.body.vy = 0;
-        if (this.body.vx > -100) {
-            this.body.applyImpulse(cp.v(-100, 0), cp.v(0, 0));
+        if (this.body.vx > -100 * this.multVelocidad) {
+            this.body.applyImpulse(cp.v(-100 * this.multVelocidad, 0), cp.v(0, 0));
         }
 
     },
@@ -127,8 +129,8 @@ var Caballero = cc.Class.extend({
         }
 
         this.body.vy = 0;
-        if (this.body.vx < 100) {
-            this.body.applyImpulse(cp.v(100, 0), cp.v(0, 0));
+        if (this.body.vx < 100 * this.multVelocidad) {
+            this.body.applyImpulse(cp.v(100 * this.multVelocidad, 0), cp.v(0, 0));
         }
 
     },
@@ -140,8 +142,8 @@ var Caballero = cc.Class.extend({
         }
 
         this.body.vx = 0;
-        if (this.body.vy < 100) {
-            this.body.applyImpulse(cp.v(0, 100), cp.v(0, 0));
+        if (this.body.vy < 100 * this.multVelocidad) {
+            this.body.applyImpulse(cp.v(0, 100 * this.multVelocidad), cp.v(0, 0));
         }
 
     },
@@ -153,8 +155,8 @@ var Caballero = cc.Class.extend({
         }
 
         this.body.vx = 0;
-        if (this.body.vy > -100) {
-            this.body.applyImpulse(cp.v(0, -100), cp.v(0, 0));
+        if (this.body.vy > -100 * this.multVelocidad) {
+            this.body.applyImpulse(cp.v(0, -100 * this.multVelocidad), cp.v(0, 0));
         }
 
     },

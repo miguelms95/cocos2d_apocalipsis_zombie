@@ -21,26 +21,25 @@ var GameLayer = cc.Layer.extend({
     cajasVida: [],
     formasEliminar: [],
     cajasTurbo:[],
+    tiempoVelocidad: null,
     scene: null,
     circuloVision:null,
     ctor: function (scene) {
         this._super();
         this.scene = scene;
         var size = cc.winSize;
+        this.tiempoVelocidad = -1;
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
         cc.spriteFrameCache.addSpriteFrames(res.llaves_plist); 
         cc.spriteFrameCache.addSpriteFrames(res.zombie_vertical_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_dcha_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_izqda_plist);
-
-        //cc.spriteFrameCache.addSpriteFrames(res.llave_gris_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.caja_vida_plist); 
+        cc.spriteFrameCache.addSpriteFrames(res.caja_vida_plist);
 
         // Inicializar Space (sin gravedad)
         this.space = new cp.Space();
 
-        //Colision jugador con llave
         this.space.addCollisionHandler(tipoJugador, tipoLlave,
             null, null, this.colisionJugadorConLlave.bind(this), null);
 
@@ -50,16 +49,18 @@ var GameLayer = cc.Layer.extend({
         this.space.addCollisionHandler(tipoJugador, tipoCajaVida,
             null, null, this.colisionJugadorConCajaVida.bind(this), null);
 
+        this.space.addCollisionHandler(tipoJugador, tipoCajaTurbo,
+            null, null, this.colisionJugadorConCajaTurbo.bind(this), null);
+
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
          this.addChild(this.depuracion, 10);
          **/
 
-
         this.scheduleUpdate();
         this.cargarMapa();
         this.caballero = new Caballero(this.space,
-            cc.p(50, 150), this);
+            cc.p(100, 150), this);
 
         this.zombie = new Zombie(this.space, cc.p(150, 250), this);
         this.circuloVision = new CirculoVision(this);
@@ -78,7 +79,15 @@ var GameLayer = cc.Layer.extend({
 
         if(this.tiempoInvulnerable > 0)
             this.tiempoInvulnerable = this.tiempoInvulnerable - dt;
- 
+
+        if(this.tiempoVelocidad > 0)
+            this.tiempoVelocidad = this.tiempoVelocidad -dt;
+
+        if(this.tiempoVelocidad <= 0 && this.tiempoVelocidad != -1){
+            this.caballero.multVelocidad = 1.0;
+            this.tiempoVelocidad = -1;
+        }
+
         var posicionXCamara = this.caballero.body.p.x - this.getContentSize().width / 2;
         var posicionYCamara = this.caballero.body.p.y - this.getContentSize().height / 2;
 
@@ -297,6 +306,12 @@ var GameLayer = cc.Layer.extend({
             var capaControles = this.getParent().getChildByTag(idCapaControles);
             capaControles.sumarVida();
         }
+        this.formasEliminar.push(shapes[1]);
+    },
+    colisionJugadorConCajaTurbo: function(arbiter, space){
+        var shapes = arbiter.getShapes();
+        this.caballero.multVelocidad = 2;
+        this.tiempoVelocidad = 5;
         this.formasEliminar.push(shapes[1]);
     }
 });

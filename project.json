@@ -20,6 +20,7 @@
         "src/ContadorLlave.js",
         "src/ContadorVidas.js",
         "src/CajaVida.js",
-        "src/CirculoVision.js"
+        "src/CirculoVision.js",
+        "src/CajaTurbo.js"
     ]
 }
