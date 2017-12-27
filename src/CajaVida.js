@@ -38,7 +38,6 @@ var CajaVida = cc.Class.extend({
         // this.sprite.setScaleX(0.25);
         // this.sprite.setScaleY(0.25);
 
-
         // forma estática
         gameLayer.space.addStaticShape(this.shape);
         // ejecutar la animación

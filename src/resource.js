@@ -21,6 +21,7 @@ var res = {
     vida_punto_png: "res/vida_punto.png",
     caja_vida_plist: "res/caja_vida.plist",
     caja_vida_png: "res/caja_vida.png",
+    caja_turbo_png: "res/caja_turbo.png",
     vision_cueva_png: "res/vision_cueva.png"
 };
 

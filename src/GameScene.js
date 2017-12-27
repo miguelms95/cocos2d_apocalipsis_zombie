@@ -4,6 +4,7 @@ var tipoJugador = 1;
 var tipoLlave = 2;
 var tipoEnemigo = 3;
 var tipoCajaVida = 4;
+var tipoCajaTurbo = 5;
 var GameLayer = cc.Layer.extend({
     orientacion: 0,
     caballero: null,
@@ -19,6 +20,7 @@ var GameLayer = cc.Layer.extend({
     llaves: [],
     cajasVida: [],
     formasEliminar: [],
+    cajasTurbo:[],
     scene: null,
     circuloVision:null,
     ctor: function (scene) {
@@ -47,19 +49,19 @@ var GameLayer = cc.Layer.extend({
 
         this.space.addCollisionHandler(tipoJugador, tipoCajaVida,
             null, null, this.colisionJugadorConCajaVida.bind(this), null);
+
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
          this.addChild(this.depuracion, 10);
          **/
 
-        this.cargarMapa();
-        this.scheduleUpdate();
 
+        this.scheduleUpdate();
+        this.cargarMapa();
         this.caballero = new Caballero(this.space,
             cc.p(50, 150), this);
 
         this.zombie = new Zombie(this.space, cc.p(150, 250), this);
-
         this.circuloVision = new CirculoVision(this);
   
         cc.eventManager.addListener({
@@ -73,8 +75,9 @@ var GameLayer = cc.Layer.extend({
     },
     update: function (dt) {
         this.space.step(dt);
-        if(this.tiempoInvulnerable>0)
-            this.tiempoInvulnerable-=dt;
+
+        if(this.tiempoInvulnerable > 0)
+            this.tiempoInvulnerable = this.tiempoInvulnerable - dt;
  
         var posicionXCamara = this.caballero.body.p.x - this.getContentSize().width / 2;
         var posicionYCamara = this.caballero.body.p.y - this.getContentSize().height / 2;
@@ -178,7 +181,6 @@ var GameLayer = cc.Layer.extend({
                 this.space.addStaticShape(shapeLimite);
             }
         }
-
         var grupoLlaves = this.mapa.getObjectGroup("llaves");
         var llavesArray = grupoLlaves.getObjects();
 
@@ -187,6 +189,16 @@ var GameLayer = cc.Layer.extend({
                 cc.p(llavesArray[i]["x"], llavesArray[i]["y"]),
                 llavesArray[i]["width"], llavesArray[i]["height"]);
             this.llaves.push(llave);
+        }
+
+        var grupoCajasTurbo = this.mapa.getObjectGroup("cajasturbo");
+        var cajasTurboArray = grupoCajasTurbo.getObjects();
+
+        for (var i = 0; i < cajasTurboArray.length; i++) {
+            var cajaTurbo = new CajaTurbo(this,
+                cc.p(cajasTurboArray[i]["x"], cajasTurboArray[i]["y"]),
+                cajasTurboArray[i]["width"], cajasTurboArray[i]["height"]);
+            this.cajasTurbo.push(cajaTurbo);
         }
 
         var grupoCajasVida = this.mapa.getObjectGroup("cajasvida");
@@ -271,7 +283,7 @@ var GameLayer = cc.Layer.extend({
     },
     colisionJugadorConEnemigo:function(arbiter,space) {
         var shapes = arbiter.getShapes();
-        if(this.tiempoInvulnerable == 0){
+        if(this.tiempoInvulnerable <= 0){
             shapes[0].vidas--;
             this.tiempoInvulnerable = 2;
             var capaControles = this.getParent().getChildByTag(idCapaControles);
