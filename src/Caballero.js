@@ -17,6 +17,7 @@ var Caballero = cc.Class.extend({
         this.space = space;
         this.layer = layer;
         this.llaves = 0;
+        this.vidas = vidasJugador;
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite("#caballero_quieto_01.png");

@@ -15,7 +15,8 @@ var ControlesLayer = cc.Layer.extend({
 
         var posActualVida = 630;
         for (var i = 0; i < vidasJugador; i++) {
-            var vida = new ContadorVidas(posActualVida);
+        var capa = this;
+            var vida = new ContadorVidas(capa,posActualVida);
             this.vidas.push(vida);
             this.addChild(vida.sprite);
             posActualVida = posActualVida + 35;
@@ -60,5 +61,12 @@ var ControlesLayer = cc.Layer.extend({
                 break;
             }
         }
+    },reducirVida: function (){
+         for (var i = 0; i < this.vidas.length; i++) {
+            if (this.vidas[i].lleno == 1) {
+                this.vidas[i].vaciar();
+                break;
+         }
     }
+}
 });
