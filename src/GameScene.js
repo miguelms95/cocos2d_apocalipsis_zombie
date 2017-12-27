@@ -298,7 +298,7 @@ var GameLayer = cc.Layer.extend({
     colisionJugadorConLlave: function (arbiter, space) {
         var shapes = arbiter.getShapes();
         // shapes[0] es el jugador y shapes[1] es la llave
-        shapes[0].llaves++;
+        this.caballero.llaves++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.colorearLlave();
         this.formasEliminar.push(shapes[1]);
@@ -306,16 +306,16 @@ var GameLayer = cc.Layer.extend({
     colisionJugadorConEnemigo:function(arbiter,space) {
         var shapes = arbiter.getShapes();
         if(this.tiempoInvulnerable <= 0){
-            shapes[0].vidas--;
+            this.caballero.vidas--;
             this.tiempoInvulnerable = 2;
             var capaControles = this.getParent().getChildByTag(idCapaControles);
             capaControles.reducirVida();
          }
     },
-    colisionJugadorConCajaVida:function (arbiter, space){
+    colisionJugadorConCajaVida:function (arbiter,space){
         var shapes = arbiter.getShapes();
-        if(shapes[0].vidas < vidasJugador){
-            shapes[0].vidas++;
+        if(this.caballero.vidas < vidasJugador){
+           this.caballero.vidas++;
             var capaControles = this.getParent().getChildByTag(idCapaControles);
             capaControles.sumarVida();
         }
