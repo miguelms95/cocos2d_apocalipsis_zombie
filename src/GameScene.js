@@ -154,6 +154,19 @@ var GameLayer = cc.Layer.extend({
                     this.llaves[i].eliminar();
                     this.llaves.splice(i, 1);
                 }
+             }
+
+            for (var i = 0; i < this.cajasTurbo.length; i++) {
+                if (this.cajasTurbo[i].shape == shape) {
+                    this.cajasTurbo[i].eliminar();
+                    this.cajasTurbo.splice(i, 1);
+                }
+            }
+            for (var i = 0; i < this.cajasVida.length; i++) {
+                if (this.cajasVida[i].shape == shape) {
+                    this.cajasVida[i].eliminar();
+                    this.cajasVida.splice(i, 1);
+                }
             }
         }
         this.formasEliminar = [];
