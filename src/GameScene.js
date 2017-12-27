@@ -2,6 +2,8 @@ var llavesNecesarias = 5;
 var vidasJugador = 5;
 var tipoJugador = 1;
 var tipoLlave = 2;
+var tipoEnemigo = 3;
+var tipoCajaVida = 4;
 var GameLayer = cc.Layer.extend({
     orientacion: 0,
     caballero: null,
@@ -9,6 +11,7 @@ var GameLayer = cc.Layer.extend({
     space: null,
     tecla: 0,
     orientacionPad: 0,
+    tiempoInvulnerable:0,
     mapa: null,
     mapaAncho: 0,
     mapaAlto: 0,
@@ -38,6 +41,12 @@ var GameLayer = cc.Layer.extend({
         //Colision jugador con llave
         this.space.addCollisionHandler(tipoJugador, tipoLlave,
             null, null, this.colisionJugadorConLlave.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoEnemigo,
+            null, null, this.colisionJugadorConEnemigo.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoCajaVida,
+            null, null, this.colisionJugadorConCajaVida.bind(this), null);
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
          this.addChild(this.depuracion, 10);
@@ -49,7 +58,7 @@ var GameLayer = cc.Layer.extend({
         this.caballero = new Caballero(this.space,
             cc.p(50, 150), this);
 
-        this.zombie = new Zombie(this.space, cc.p(1, 250), this);
+        this.zombie = new Zombie(this.space, cc.p(150, 250), this);
 
         this.circuloVision = new CirculoVision(this);
   
@@ -64,6 +73,8 @@ var GameLayer = cc.Layer.extend({
     },
     update: function (dt) {
         this.space.step(dt);
+        if(this.tiempoInvulnerable>0)
+            this.tiempoInvulnerable-=dt;
  
         var posicionXCamara = this.caballero.body.p.x - this.getContentSize().width / 2;
         var posicionYCamara = this.caballero.body.p.y - this.getContentSize().height / 2;
@@ -256,6 +267,24 @@ var GameLayer = cc.Layer.extend({
         shapes[0].llaves++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.colorearLlave();
+        this.formasEliminar.push(shapes[1]);
+    },
+    colisionJugadorConEnemigo:function(arbiter,space) {
+        var shapes = arbiter.getShapes();
+        if(this.tiempoInvulnerable == 0){
+            shapes[0].vidas--;
+            this.tiempoInvulnerable = 2;
+            var capaControles = this.getParent().getChildByTag(idCapaControles);
+            capaControles.reducirVida();
+         }
+    },
+    colisionJugadorConCajaVida:function (arbiter, space){
+        var shapes = arbiter.getShapes();
+        if(shapes[0].vidas < vidasJugador){
+            shapes[0].vidas++;
+            var capaControles = this.getParent().getChildByTag(idCapaControles);
+            capaControles.sumarVida();
+        }
         this.formasEliminar.push(shapes[1]);
     }
 });

@@ -40,7 +40,6 @@ var Zombie = cc.Class.extend({
 
         this.shape.setFriction(1);
         this.shape.setElasticity(0);
-        this.shape.setSensor(false);
         this.shape.setCollisionType(tipoEnemigo);
 
         // forma dinamica

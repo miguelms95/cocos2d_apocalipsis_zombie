@@ -31,9 +31,9 @@ var CajaVida = cc.Class.extend({
         this.shape = new cp.CircleShape(body, radio , cp.vzero);
 
         // Nunca genera colisiones reales, es como un “fantasma”
-        this.shape.setSensor(true);
+        this.shape.setSensor(false);
 
-        // this.shape.setCollisionType(tipoLlave);
+        this.shape.setCollisionType(tipoCajaVida);
 
         // this.sprite.setScaleX(0.25);
         // this.sprite.setScaleY(0.25);

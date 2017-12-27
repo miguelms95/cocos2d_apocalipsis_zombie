@@ -67,6 +67,14 @@ var ControlesLayer = cc.Layer.extend({
                 this.vidas[i].vaciar();
                 break;
          }
+      }
+    },
+    sumarVida: function(){
+        for (var i = 0; i < this.vidas.length; i++) {
+            if (this.vidas[i].lleno == 0) {
+                this.vidas[i].rellenar();
+                break;
+        }
     }
-}
+  }
 });
