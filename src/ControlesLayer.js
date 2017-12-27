@@ -1,5 +1,6 @@
 var ControlesLayer = cc.Layer.extend({
     pad: null,
+    botonTurbo:null,
     llaves: [],
     vidas: [],
     ctor: function() {
@@ -24,8 +25,9 @@ var ControlesLayer = cc.Layer.extend({
 
 
         this.pad = new Pad(this);
+        this.botonTurbo = new BotonTurbo(this);
 
-        // Registrar Mouse Down
+        // Registrar Mouse Events
         cc.eventManager.addListener({
             event: cc.EventListener.MOUSE,
             onMouseDown: this.procesarMouseDown,
@@ -41,6 +43,14 @@ var ControlesLayer = cc.Layer.extend({
         var gameLayer = instancia.getParent().getChildByTag(idCapaJuego);
         var posicion = cc.p(event.getLocationX(), event.getLocationY());
         gameLayer.orientacionPad = instancia.pad.pulsado(posicion);
+        var pulsadoTurbo = instancia.botonTurbo.pulsado(posicion);
+        if(pulsadoTurbo){
+            if(gameLayer.caballero.cargasTurbo > 0){
+                gameLayer.caballero.multVelocidad = 2;
+                gameLayer.tiempoVelocidad = 5;
+                gameLayer.caballero.cargasTurbo--;
+            }
+        }
     },
     procesarMouseUp: function(event) {
         var instancia = event.getCurrentTarget();
@@ -77,4 +87,5 @@ var ControlesLayer = cc.Layer.extend({
         }
     }
   }
+
 });

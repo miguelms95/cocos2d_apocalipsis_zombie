@@ -22,7 +22,8 @@ var res = {
     caja_vida_plist: "res/caja_vida.plist",
     caja_vida_png: "res/caja_vida.png",
     caja_turbo_png: "res/caja_turbo.png",
-    vision_cueva_png: "res/vision_cueva.png"
+    vision_cueva_png: "res/vision_cueva.png",
+    boton_turbo_png: "res/boton_turbo.png"
 };
 
 var g_resources = [];

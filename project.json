@@ -21,6 +21,7 @@
         "src/ContadorVidas.js",
         "src/CajaVida.js",
         "src/CirculoVision.js",
-        "src/CajaTurbo.js"
+        "src/CajaTurbo.js",
+        "src/BotonTurbo.js"
     ]
 }

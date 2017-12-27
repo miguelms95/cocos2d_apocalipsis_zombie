@@ -11,14 +11,13 @@ var Caballero = cc.Class.extend({
     animacionAbajo: null,
     multVelocidad:null,
     animacion: null, // Actuals
-    llaves: null,
-    vidas: null,
+    llaves: 0,
+    vidas: vidasJugador,
+    cargasTurbo:0,
 
     ctor: function(space, posicion, layer) {
         this.space = space;
         this.layer = layer;
-        this.llaves = 0;
-        this.vidas = vidasJugador;
         this.multVelocidad = 1.0;
 
         // Crear Sprite - Cuerpo y forma
