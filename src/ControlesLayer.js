@@ -3,6 +3,7 @@ var ControlesLayer = cc.Layer.extend({
     botonTurbo:null,
     llaves: [],
     vidas: [],
+    etiquetaCargas:null,
     ctor: function() {
         this._super();
         var size = cc.winSize;
@@ -23,6 +24,11 @@ var ControlesLayer = cc.Layer.extend({
             posActualVida = posActualVida + 35;
         }
 
+        // Contador de cargas
+        this.etiquetaCargas = new cc.LabelTTF("Cargas de turbo: 0", "Helvetica", 20);
+        this.etiquetaCargas.setPosition(cc.p(size.width - 90, size.height - 80));
+        this.etiquetaCargas.fillStyle = new cc.Color(0, 0, 0, 0);
+        this.addChild(this.etiquetaCargas);
 
         this.pad = new Pad(this);
         this.botonTurbo = new BotonTurbo(this);
@@ -49,6 +55,7 @@ var ControlesLayer = cc.Layer.extend({
                 gameLayer.caballero.multVelocidad = 2;
                 gameLayer.tiempoVelocidad = 5;
                 gameLayer.caballero.cargasTurbo--;
+                instancia.actualizarCargasTurbo();
             }
         }
     },
@@ -86,6 +93,9 @@ var ControlesLayer = cc.Layer.extend({
                 break;
         }
     }
+  },
+  actualizarCargasTurbo: function(){
+        var gameLayer = this.getParent().getChildByTag(idCapaJuego);
+        this.etiquetaCargas.setString("Cargas de turbo: " + gameLayer.caballero.cargasTurbo);
   }
-
 });

@@ -324,6 +324,8 @@ var GameLayer = cc.Layer.extend({
     colisionJugadorConCajaTurbo: function(arbiter, space){
         var shapes = arbiter.getShapes();
         this.caballero.cargasTurbo++;
+        var capaControles = this.getParent().getChildByTag(idCapaControles);
+        capaControles.actualizarCargasTurbo();
         this.formasEliminar.push(shapes[1]);
     }
 });
