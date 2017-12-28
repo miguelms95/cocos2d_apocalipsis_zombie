@@ -4,7 +4,9 @@ var BotonTurbo = cc.Class.extend({
     ctor:function (layer){
         var size = cc.winSize;
         this.spriteBotonTurbo = cc.Sprite.create(res.boton_turbo_png);
-        this.spriteBotonTurbo.setPosition(cc.p(size.width*0.8, size.height*0.2));
+        this.spriteBotonTurbo.setPosition(cc.p(size.width*0.9, size.height*0.2));
+        this.spriteBotonTurbo.setScaleX(0.5);
+        this.spriteBotonTurbo.setScaleY(0.5);
         layer.addChild(this.spriteBotonTurbo);
     },
     pulsado:function(posicion){
