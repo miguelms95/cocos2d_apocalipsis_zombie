@@ -10,11 +10,13 @@ var Zombie = cc.Class.extend({
         animacionArriba:null,
         animacionAbajo:null,
         animacion:null,
+        multVelocidad:null,
 
     ctor:function (space, posicion, layer) {
         this.space = space;
         this.layer = layer;
         this.body = new cp.Body(5, Infinity);
+        this.multVelocidad = 1.0;
 
         this.body.setPos(posicion);
         //body.w_limit = 0.02;
@@ -112,8 +114,8 @@ var Zombie = cc.Class.extend({
         }
 
         this.body.vy = 0;
-        if ( this.body.vx > -100){
-            this.body.applyImpulse(cp.v(-100, 0), cp.v(0, 0));
+        if ( this.body.vx > -100 * this. multVelocidad){
+            this.body.applyImpulse(cp.v(-100 * this.multVelocidad, 0), cp.v(0, 0));
         }
     }, moverDerecha:function() {
         if (this.animacion != this.animacionDerecha){
@@ -123,8 +125,8 @@ var Zombie = cc.Class.extend({
         }
 
         this.body.vy = 0;
-        if ( this.body.vx < 100) {
-            this.body.applyImpulse(cp.v(100, 0), cp.v(0, 0));
+        if ( this.body.vx < 100 * this.multVelocidad) {
+            this.body.applyImpulse(cp.v(100 * this.multVelocidad, 0), cp.v(0, 0));
         }
     }, moverArriba:function() {
         if (this.animacion != this.animacionArriba){
@@ -134,8 +136,8 @@ var Zombie = cc.Class.extend({
         }
 
         this.body.vx = 0;
-        if ( this.body.vy < 100){
-            this.body.applyImpulse(cp.v(0, 100), cp.v(0, 0));
+        if ( this.body.vy < 100 * this.multVelocidad){
+            this.body.applyImpulse(cp.v(0, 100 * this.multVelocidad), cp.v(0, 0));
         }
 
     }, moverAbajo:function() {
@@ -146,8 +148,8 @@ var Zombie = cc.Class.extend({
         }
 
         this.body.vx = 0;
-        if ( this.body.vy > -100){
-            this.body.applyImpulse(cp.v(0, -100), cp.v(0, 0));
+        if ( this.body.vy > -100 * this.multVelocidad){
+            this.body.applyImpulse(cp.v(0, -100 * this.multVelocidad), cp.v(0, 0));
         }
 
     }, detener : function() {
