@@ -77,6 +77,8 @@ var GameLayer = cc.Layer.extend({
             onKeyReleased: this.teclaLevantada
         }, this);
 
+        // FELIZ 28 DE DICIEMBRE SANTOS INOCENTES
+
         return true;
 
     },
