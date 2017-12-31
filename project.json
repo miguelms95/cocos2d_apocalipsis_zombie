@@ -24,6 +24,7 @@
         "src/CajaTurbo.js",
         "src/BotonTurbo.js",
         "src/CajaAturdimiento.js",
+        "src/BloqueDestruible.js",
         "src/GameOverLayer.js"
     ]
 }

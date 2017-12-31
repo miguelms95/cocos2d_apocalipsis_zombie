@@ -25,6 +25,7 @@ var res = {
     vision_cueva_png: "res/vision_cueva.png",
     boton_turbo_png: "res/boton_turbo.png",
     caja_aturdimiento_png: "res/caja_aturdimiento.png",
+    bloque_destruible_png: "res/caja_destruible.png",
     boton_reanudar_png: "res/boton_reanudar.png"
 };
 
