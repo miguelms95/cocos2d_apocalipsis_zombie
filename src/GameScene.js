@@ -32,6 +32,7 @@ var GameLayer = cc.Layer.extend({
     pad: null,
     llaves: [],
     cajasVida: [],
+    bloquesDestruibles: [],
     formasEliminar: [],
     cajasTurbo: [],
     cajasAturdimiento: [],
@@ -269,6 +270,16 @@ var GameLayer = cc.Layer.extend({
                 cc.p(cajaVidasArray[i]["x"], cajaVidasArray[i]["y"]),
                 cajaVidasArray[i]["width"], cajaVidasArray[i]["height"]);
             this.cajasVida.push(estaCajaVida);
+        }
+
+        var grupoBloquesDestruibles = this.mapa.getObjectGroup("bloques_destruibles");
+        var bloquesDestruiblesArray = grupoBloquesDestruibles.getObjects();
+
+        for (var i = 0; i < bloquesDestruiblesArray.length; i++) {
+            var esteBloqueDestruible = new BloqueDestruible(this,
+                cc.p(bloquesDestruiblesArray[i]["x"], bloquesDestruiblesArray[i]["y"]),
+                bloquesDestruiblesArray[i]["width"], bloquesDestruiblesArray[i]["height"]);
+            this.bloquesDestruibles.push(esteBloqueDestruible);
         }
 
         var grupoZombies = this.mapa.getObjectGroup("zombies");

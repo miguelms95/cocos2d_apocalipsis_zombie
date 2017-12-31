@@ -61,10 +61,10 @@
  </objectgroup>
  <objectgroup name="bloques_destruibles">
   <object id="30" x="558.667" y="366.667" width="16" height="16"/>
-  <object id="31" x="578" y="367.333" width="16" height="16"/>
-  <object id="39" x="302.334" y="352.334" width="16" height="16"/>
-  <object id="40" x="321.667" y="353" width="16" height="16"/>
-  <object id="41" x="159.667" y="703" width="16" height="16"/>
+  <object id="31" x="584" y="367.333" width="16" height="16"/>
+  <object id="39" x="295.667" y="351.667" width="16" height="16"/>
+  <object id="40" x="321.667" y="352.333" width="19.3333" height="16"/>
+  <object id="41" x="154.334" y="702.333" width="16" height="16"/>
   <object id="42" x="179" y="703.666" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="llaves">

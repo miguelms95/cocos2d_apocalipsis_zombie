@@ -8,8 +8,8 @@ var BloqueDestruible = cc.Class.extend({
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite(res.bloque_destruible_png);
-        this.sprite.setScaleX(0.5);
-        this.sprite.setScaleY(0.5);
+        // this.sprite.setScaleX(0.5);
+        // this.sprite.setScaleY(0.5);
         // Cuerpo estática, no le afectan las fuerzas
         var body = new cp.StaticBody();
         body.setPos(posicion);
