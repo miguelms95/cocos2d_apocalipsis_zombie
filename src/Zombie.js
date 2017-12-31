@@ -11,8 +11,10 @@ var Zombie = cc.Class.extend({
         animacionAbajo:null,
         animacion:null,
         multVelocidad:null,
+        moverVertical: false,
 
-    ctor:function (space, posicion, layer) {
+    ctor:function (moverVertical, space, posicion, layer) {
+        this.moverVertical = moverVertical;
         this.space = space;
         this.layer = layer;
         this.body = new cp.Body(5, Infinity);
@@ -23,12 +25,10 @@ var Zombie = cc.Class.extend({
         this.body.setAngle(0);
 
         // Crear Sprite - Cuerpo y forma
-        if(this.moviendoseAIzquierda()) {
-            this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-I.png");
-        }
-        else {
+        if (this.moverVertical)
+            this.sprite = new cc.PhysicsSprite("#Zombi-Giro-1.png");
+        else
             this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-D.png");
-        }
 
         this.sprite.setBody(this.body);
 
@@ -93,17 +93,6 @@ var Zombie = cc.Class.extend({
         this.animacionAbajo =
             new cc.RepeatForever(new cc.Animate(animacion));
 
-
-        // ejecutar la animación
-        if(this.moviendoseAIzquierda()){
-            this.sprite.runAction(this.animacionIzquierda);
-            this.animacion = this.animacionIzquierda;
-        }
-        else{
-            this.sprite.runAction(this.animacionDerecha);
-            this.animacion = this.animacionDerecha;
-        }
-
         layer.addChild(this.sprite,10);
 
     }, moverIzquierda:function() {
@@ -159,17 +148,10 @@ var Zombie = cc.Class.extend({
 
         this.body.vx = 0;
         this.body.vy = 0;
-    },
-    moviendoseAIzquierda : function () {
-        return  this.body.p.x > this.layer.caballero.body.p.x;
-    },
-    moviendoseAbajo : function () {
-        return this.body.p.y > this.layer.caballero.body.p.y;
-    },
-    mismaPosicionX : function () {
-        return Math.round(this.body.p.x) == Math.round(this.layer.caballero.body.p.x);
-    },
-    mismaPosicionY : function () {
-        return Math.round(this.body.p.y) == Math.round(this.layer.caballero.body.p.y);
+    }, girar: function() {
+        if (this.moverVertical)
+            this.body.vy *= -1;
+        else
+            this.body.vx *= -1;
     }
 });

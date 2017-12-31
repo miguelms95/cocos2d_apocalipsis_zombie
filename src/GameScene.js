@@ -1,3 +1,15 @@
+var Thread = {
+    sleep: function (ms) {
+        var start = Date.now();
+
+        while (true) {
+            var clock = (Date.now() - start);
+            if (clock >= ms) break;
+        }
+
+    }
+};
+
 var llavesNecesarias = 5;
 var vidasJugador = 5;
 var tipoJugador = 1;
@@ -9,11 +21,11 @@ var tipoCajaAturdimiento = 6;
 var GameLayer = cc.Layer.extend({
     orientacion: 0,
     caballero: null,
-    zombie: null,
+    zombies: [],
     space: null,
     tecla: 0,
     orientacionPad: 0,
-    tiempoInvulnerable:0,
+    tiempoInvulnerable: 0,
     mapa: null,
     mapaAncho: 0,
     mapaAlto: 0,
@@ -21,12 +33,12 @@ var GameLayer = cc.Layer.extend({
     llaves: [],
     cajasVida: [],
     formasEliminar: [],
-    cajasTurbo:[],
-    cajasAturdimiento:[],
+    cajasTurbo: [],
+    cajasAturdimiento: [],
     tiempoVelocidad: null,
-    tiempoAturdimiento:null,
+    tiempoAturdimiento: null,
     scene: null,
-    circuloVision:null,
+    circuloVision: null,
     ctor: function (scene) {
         this._super();
         this.scene = scene;
@@ -34,7 +46,7 @@ var GameLayer = cc.Layer.extend({
         this.tiempoVelocidad = -1;
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
-        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist); 
+        cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_vertical_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_dcha_plist);
         cc.spriteFrameCache.addSpriteFrames(res.zombie_izqda_plist);
@@ -58,6 +70,9 @@ var GameLayer = cc.Layer.extend({
         this.space.addCollisionHandler(tipoJugador, tipoCajaAturdimiento,
             null, null, this.colisionJugadorConCajaAturdimiento.bind(this), null);
 
+        this.space.setDefaultCollisionHandler(
+                null, null, this.colisionZombie.bind(this), null);
+
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
          this.addChild(this.depuracion, 10);
@@ -68,16 +83,13 @@ var GameLayer = cc.Layer.extend({
         this.caballero = new Caballero(this.space,
             cc.p(100, 150), this);
 
-        this.zombie = new Zombie(this.space, cc.p(150, 250), this);
         this.circuloVision = new CirculoVision(this);
-  
+
         cc.eventManager.addListener({
             event: cc.EventListener.KEYBOARD,
             onKeyPressed: this.teclaPulsada,
             onKeyReleased: this.teclaLevantada
         }, this);
-
-        // FELIZ 28 DE DICIEMBRE SANTOS INOCENTES
 
         return true;
 
@@ -85,22 +97,24 @@ var GameLayer = cc.Layer.extend({
     update: function (dt) {
         this.space.step(dt);
 
-        if(this.tiempoInvulnerable > 0)
+        if (this.tiempoInvulnerable > 0)
             this.tiempoInvulnerable = this.tiempoInvulnerable - dt;
 
-        if(this.tiempoVelocidad > 0)
-            this.tiempoVelocidad = this.tiempoVelocidad -dt;
+        if (this.tiempoVelocidad > 0)
+            this.tiempoVelocidad = this.tiempoVelocidad - dt;
 
-        if(this.tiempoVelocidad <= 0 && this.tiempoVelocidad != -1){
+        if (this.tiempoVelocidad <= 0 && this.tiempoVelocidad != -1) {
             this.caballero.multVelocidad = 1.0;
             this.tiempoVelocidad = -1;
         }
 
-        if(this.tiempoAturdimiento > 0)
-            this.tiempoAturdimiento = this.tiempoAturdimiento -dt;
+        if (this.tiempoAturdimiento > 0)
+            this.tiempoAturdimiento = this.tiempoAturdimiento - dt;
 
-        if(this.tiempoAturdimiento <= 0 && this.tiempoAturdimiento != -1){
-            this.zombie.multVelocidad = 1.0;
+        if (this.tiempoAturdimiento <= 0 && this.tiempoAturdimiento != -1) {
+            for (var zombie of this.zombies) {
+               zombie.multVelocidad = 1.0;
+            }
             this.tiempoAturdimiento = -1;
         }
 
@@ -147,30 +161,21 @@ var GameLayer = cc.Layer.extend({
         if (this.tecla === 0 && this.orientacionPad === 0) {
             this.caballero.detener();
         }
+
+        for (var zombie of this.zombies) {
+            this.moverZombie(zombie);
+        }
+
         // Eliminar formas:
         for (var i = 0; i < this.formasEliminar.length; i++) {
             var shape = this.formasEliminar[i];
-
-            if (this.zombie.mismaPosicionX()) {
-                this.moverZombieEjeY();
-                this.depurarCordenadas(this.zombie, this.caballero);
-            } else if (this.zombie.mismaPosicionY()) {
-                this.moverZombieEjeX();
-                this.depurarCordenadas(this.zombie, this.caballero);
-            } else if (this.orientacion++ % 2 == 0) {
-                this.moverZombieEjeX();
-                this.depurarCordenadas(this.zombie, this.caballero);
-            } else {
-                this.moverZombieEjeY();
-                this.depurarCordenadas(this.zombie, this.caballero);
-            }
 
             for (var i = 0; i < this.llaves.length; i++) {
                 if (this.llaves[i].shape == shape) {
                     this.llaves[i].eliminar();
                     this.llaves.splice(i, 1);
                 }
-             }
+            }
 
             for (var i = 0; i < this.cajasTurbo.length; i++) {
                 if (this.cajasTurbo[i].shape == shape) {
@@ -185,11 +190,11 @@ var GameLayer = cc.Layer.extend({
                 }
             }
             for (var i = 0; i < this.cajasAturdimiento.length; i++) {
-               if (this.cajasAturdimiento[i].shape == shape) {
-                   this.cajasAturdimiento[i].eliminar();
-                   this.cajasAturdimiento.splice(i, 1);
-               }
-           }
+                if (this.cajasAturdimiento[i].shape == shape) {
+                    this.cajasAturdimiento[i].eliminar();
+                    this.cajasAturdimiento.splice(i, 1);
+                }
+            }
         }
         this.formasEliminar = [];
     },
@@ -198,6 +203,7 @@ var GameLayer = cc.Layer.extend({
         // Añadirlo a la Layer
         this.addChild(this.mapa);
         // Ancho del mapa
+
         this.mapaAncho = this.mapa.getContentSize().width;
         this.mapaAlto = this.mapa.getContentSize().height;
 
@@ -245,8 +251,8 @@ var GameLayer = cc.Layer.extend({
             this.cajasTurbo.push(cajaTurbo);
         }
 
-       var grupoCajasAturd = this.mapa.getObjectGroup("cajasaturdimiento");
-       var cajasAturdArray = grupoCajasAturd.getObjects();
+        var grupoCajasAturd = this.mapa.getObjectGroup("cajasaturdimiento");
+        var cajasAturdArray = grupoCajasAturd.getObjects();
 
         for (var i = 0; i < cajasAturdArray.length; i++) {
             var cajaAturd = new CajaAturdimiento(this,
@@ -265,54 +271,66 @@ var GameLayer = cc.Layer.extend({
             this.cajasVida.push(estaCajaVida);
         }
 
+        var grupoZombies = this.mapa.getObjectGroup("zombies");
+        var zombiesArray = grupoZombies.getObjects();
+
+        for (var i = 0; i < zombiesArray.length; i++) {
+            this.zombies.push(new Zombie(zombiesArray[i].name == "v", this.space, cc.p(zombiesArray[i]["x"], zombiesArray[i]["y"]), this));
+        }
     },
     teclaPulsada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
         instancia.tecla = keyCode;
     },
     moverPersonajeIzquierda: function (personaje) {
-        if (personaje.body.p.x > 0) {
+        if (personaje.body.p.x > personaje.sprite.getContentSize().width / 2) {
             personaje.moverIzquierda();
         } else {
             personaje.detener();
         }
     },
     moverPersonajeDerecha: function (personaje) {
-        if (personaje.body.p.x < this.mapaAncho) {
+        if (personaje.body.p.x < this.mapaAncho - personaje.sprite.getContentSize().width / 2) {
             personaje.moverDerecha();
         } else {
             personaje.detener();
         }
     },
     moverPersonajeArriba: function (personaje) {
-        if (personaje.body.p.y < this.mapaAlto) {
+        if (personaje.body.p.y < this.mapaAlto - personaje.sprite.getContentSize().height / 2) {
             personaje.moverArriba();
         } else {
             personaje.detener();
         }
     },
     moverPersonajeAbajo: function (personaje) {
-        if (personaje.body.p.y > 0) {
+        if (personaje.body.p.y > personaje.sprite.getContentSize().height / 2) {
             personaje.moverAbajo();
         } else {
             personaje.detener();
         }
     },
-    moverZombieEjeY: function () {
-        if (this.zombie.moviendoseAbajo()) {
-            this.moverPersonajeAbajo(this.zombie);
-        } else {
-            this.moverPersonajeArriba(this.zombie);
-        }
+    moverZombie: function (zombie) {
+        if (zombie.moverVertical)
+            this.moverZombieEjeY(zombie);
+        else
+            this.moverZombieEjeX(zombie);
     },
-    moverZombieEjeX: function () {
-
-        if (this.zombie.moviendoseAIzquierda()) {
-            this.moverPersonajeIzquierda(this.zombie);
-        } else
-            this.moverPersonajeDerecha(this.zombie);
+    moverZombieEjeY: function (zombie) {
+        if (zombie.body.vy >= 0)
+            this.moverPersonajeArriba(zombie);
+        else
+            this.moverPersonajeAbajo(zombie);
+    },
+    moverZombieEjeX: function (zombie) {
+        if (zombie.body.vx >= 0)
+            this.moverPersonajeDerecha(zombie);
+        else
+            this.moverPersonajeIzquierda(zombie);
     },
     depurarCordenadas: function (zom, cab) {
+        if (true) return;
+
         console.log("ZOMBIE");
         console.log("X: " + zom.body.p.x);
         console.log("Y: " + zom.body.p.y);
@@ -335,36 +353,64 @@ var GameLayer = cc.Layer.extend({
         capaControles.colorearLlave();
         this.formasEliminar.push(shapes[1]);
     },
-    colisionJugadorConEnemigo:function(arbiter,space) {
+    colisionJugadorConEnemigo: function (arbiter, space) {
         var shapes = arbiter.getShapes();
-        if(this.tiempoInvulnerable <= 0){
+        if (this.tiempoInvulnerable <= 0) {
             this.caballero.vidas--;
             this.tiempoInvulnerable = 2;
             var capaControles = this.getParent().getChildByTag(idCapaControles);
             capaControles.reducirVida();
-         }
+
+            var shapeEnemigo = shapes[1];
+
+            for (var zombie of this.zombies) {
+                if (zombie.shape === shapeEnemigo) {
+                    zombie.girar();
+                }
+            }
+
+            if (this.caballero.vidas <= 0) {
+                this.getParent().addChild(new GameOverLayer());
+            }
+        }
     },
-    colisionJugadorConCajaVida:function (arbiter,space){
+    colisionJugadorConCajaVida: function (arbiter, space) {
         var shapes = arbiter.getShapes();
-        if(this.caballero.vidas < vidasJugador){
-           this.caballero.vidas++;
+        if (this.caballero.vidas < vidasJugador) {
+            this.caballero.vidas++;
             var capaControles = this.getParent().getChildByTag(idCapaControles);
             capaControles.sumarVida();
         }
         this.formasEliminar.push(shapes[1]);
     },
-    colisionJugadorConCajaTurbo: function(arbiter, space){
+    colisionJugadorConCajaTurbo: function (arbiter, space) {
         var shapes = arbiter.getShapes();
         this.caballero.cargasTurbo++;
         var capaControles = this.getParent().getChildByTag(idCapaControles);
         capaControles.actualizarCargasTurbo();
         this.formasEliminar.push(shapes[1]);
     },
-    colisionJugadorConCajaAturdimiento: function(arbiter,space){
+    colisionJugadorConCajaAturdimiento: function (arbiter, space) {
         var shapes = arbiter.getShapes();
-        this.zombie.multVelocidad = 0.5;
+        for (var zombie of this.zombies) {
+            zombie.multVelocidad = 0.5;
+        }
         this.tiempoAturdimiento = 3;
         this.formasEliminar.push(shapes[1]);
+    },
+    colisionZombie: function(arbiter, space) {
+        var shapes = arbiter.getShapes();
+        if (shapes[0].collision_type === tipoEnemigo) {
+            var x = shapes[0].body.p.x;
+            var y = shapes[0].body.p.y;
+
+            for (var zombie of this.zombies) {
+                if (zombie.body.p.x === x && zombie.body.p.y === y) {
+                    //zombie.girar();
+                    break;
+                }
+            }
+        }
     }
 });
 

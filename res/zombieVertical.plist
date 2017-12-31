@@ -55,7 +55,7 @@
 			<key>size</key>
 			<string>{64,128}</string>
 			<key>textureFileName</key>
-			<string>moverVertical.png</string>
+			<string>zombieVertical.png</string>
 			</dict>
 		</dict>
 </plist>
