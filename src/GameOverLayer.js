@@ -16,6 +16,12 @@ var GameOverLayer = cc.Layer.extend({
         var menu = new cc.Menu(botonReiniciar);
         menu.setPosition(winSize.width / 2, winSize.height / 2);
 
+        var fondo = new cc.Sprite();
+        fondo.setTextureRect(cc.rect(winSize.width / 2, winSize.height / 2, winSize.width, winSize.height));
+        fondo.setAnchorPoint(0.5, 0.5);
+        fondo.setPosition(winSize.width / 2, winSize.height / 2);
+        fondo.setColor(cc.color(0, 0, 0, 0));
+        this.addChild(fondo);
         this.addChild(menu);
     },
     pulsarReiniciar:function(sender) {
