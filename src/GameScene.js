@@ -371,6 +371,7 @@ var GameLayer = cc.Layer.extend({
 
             if (this.caballero.vidas <= 0) {
                 this.getParent().addChild(new GameOverLayer());
+                this.getParent().removeChild(this);
             }
         }
     },

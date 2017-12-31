@@ -4,7 +4,7 @@ var GameOverLayer = cc.Layer.extend({
         this.init();
     },
     init:function() {
-        this._super(cc.color(0, 0, 0, 180));
+        this._super(cc.color(0, 0, 0, 255));
 
         var winSize = cc.director.getWinSize();
 
