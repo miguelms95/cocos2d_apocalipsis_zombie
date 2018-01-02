@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" nextobjectid="30">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" nextobjectid="38">
  <tileset firstgid="1" name="tiles16" tilewidth="16" tileheight="16" spacing="1" tilecount="1767" columns="57">
   <image source="tiles16.png" width="968" height="526"/>
  </tileset>
@@ -8,7 +8,7 @@
    eJztwwEJAAAMBKFr9v1brcdQcNVUVVVVVVVVVVVVVVVV1VcP1s92Hg==
   </data>
  </layer>
- <objectgroup name="cajasaturdimiento" visible="0">
+ <objectgroup name="cajasaturdimiento">
   <object id="25" x="459" y="766" width="28" height="26"/>
   <object id="26" x="458" y="518" width="27" height="26"/>
  </objectgroup>
@@ -27,7 +27,7 @@
    eJzt2LENwkAMQFFHSqahDSuxAEwIRYYKBbqOAkMTKcT3nuTi5MbX/ggAAOAf3ceIJZnHuPd121vbn6bP8yz433nKd+cvuyM7/XhXdB0ibsPeVwAAAGwv6xYVm0WTdYuKzaLJukXVZvGu9YpL9NEteqLRAAAAAADQsxdn3RPT
   </data>
  </layer>
- <objectgroup name="Limites" visible="0">
+ <objectgroup name="Limites">
   <object id="1" x="432" y="658.667">
    <polyline points="0,0 0.666667,44 -160.667,46 -159.333,16 -143.333,-3.33333 0,-1.33333"/>
   </object>
@@ -59,7 +59,17 @@
    <polyline points="2,3.5 0.666667,93.3333 96,94 95.3333,-0.666667 2.25,1.58333"/>
   </object>
  </objectgroup>
- <objectgroup name="llaves" visible="0">
+ <objectgroup name="entradascasas">
+  <object id="36" name="mapacasa" x="298.667" y="565.333">
+   <polyline points="0,0 13.3333,-1.33333"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="entradascuevas">
+  <object id="37" name="mapacasa" x="472" y="260">
+   <polyline points="0,0 14.6667,-1.33333"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="llaves">
   <object id="12" x="485" y="160" width="20" height="20"/>
   <object id="15" x="709" y="568" width="20" height="20"/>
   <object id="16" x="270" y="751" width="20" height="20"/>
@@ -69,10 +79,10 @@
   <object id="28" name="v" x="671" y="758"/>
   <object id="29" name="h" x="26" y="515"/>
  </objectgroup>
- <objectgroup name="cajasturbo" visible="0">
+ <objectgroup name="cajasturbo">
   <object id="23" x="47" y="806" width="27" height="26"/>
  </objectgroup>
- <objectgroup name="cajasvida" visible="0">
+ <objectgroup name="cajasvida">
   <object id="18" x="495.333" y="446.667" width="17.6667" height="18.6667"/>
   <object id="19" x="238.5" y="782" width="17.6667" height="18.6667"/>
   <object id="20" x="226.5" y="286" width="17.6667" height="18.6667"/>

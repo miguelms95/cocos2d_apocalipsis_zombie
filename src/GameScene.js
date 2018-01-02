@@ -1,14 +1,4 @@
-var Thread = {
-    sleep: function (ms) {
-        var start = Date.now();
-
-        while (true) {
-            var clock = (Date.now() - start);
-            if (clock >= ms) break;
-        }
-
-    }
-};
+var caballeroGlobal = null;
 
 var llavesNecesarias = 5;
 var vidasJugador = 5;
@@ -18,6 +8,13 @@ var tipoEnemigo = 3;
 var tipoCajaVida = 4;
 var tipoCajaTurbo = 5;
 var tipoCajaAturdimiento = 6;
+var tipoEntradaCasa = 7;
+var tipoEntradaCueva = 8;
+var tipoPuertaSalida = 9;
+
+var capas = {};
+var capaActual = null;
+
 var GameLayer = cc.Layer.extend({
     orientacion: 0,
     caballero: null,
@@ -26,6 +23,7 @@ var GameLayer = cc.Layer.extend({
     tecla: 0,
     orientacionPad: 0,
     tiempoInvulnerable: 0,
+    nombreMapa: null,
     mapa: null,
     mapaAncho: 0,
     mapaAlto: 0,
@@ -39,11 +37,20 @@ var GameLayer = cc.Layer.extend({
     tiempoAturdimiento: null,
     scene: null,
     circuloVision: null,
-    ctor: function (scene) {
+    entradasCasas: [],
+    entradasCuevas: [],
+    salidas: [],
+    capaACambiar: null,
+    activarCirculoVision: false,
+    yaEntradoEnCapa: false,
+    ultimaPosicionCaballero: null,
+
+    ctor: function (scene, nombreMapa, circuloVisionActivado = false) {
         this._super();
         this.scene = scene;
         var size = cc.winSize;
         this.tiempoVelocidad = -1;
+        this.nombreMapa = nombreMapa;
 
         cc.spriteFrameCache.addSpriteFrames(res.caballero_plist);
         cc.spriteFrameCache.addSpriteFrames(res.llaves_plist);
@@ -70,8 +77,17 @@ var GameLayer = cc.Layer.extend({
         this.space.addCollisionHandler(tipoJugador, tipoCajaAturdimiento,
             null, null, this.colisionJugadorConCajaAturdimiento.bind(this), null);
 
+        this.space.addCollisionHandler(tipoJugador, tipoEntradaCasa,
+            null, null, this.colisionJugadorConEntradaCasa.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoEntradaCueva,
+            null, null, this.colisionJugadorConEntradaCueva.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoPuertaSalida,
+            null, null, this.colisionJugadorConSalida.bind(this), null);
+
         this.space.setDefaultCollisionHandler(
-                null, null, this.colisionZombie.bind(this), null);
+            null, null, this.colisionZombie.bind(this), null);
 
         /**
          this.depuracion = new cc.PhysicsDebugNode(this.space);
@@ -80,8 +96,15 @@ var GameLayer = cc.Layer.extend({
 
         this.scheduleUpdate();
         this.cargarMapa();
-        this.caballero = new Caballero(this.space,
-            cc.p(100, 150), this);
+
+        if (caballeroGlobal == null) {
+            caballeroGlobal = new Caballero(this.space,
+                cc.p(100, 150), this);
+        } else {
+            caballeroGlobal.cambiarCapa(this.space, cc.p(100, 150), this);
+        }
+        this.caballero = caballeroGlobal;
+
 
         this.circuloVision = new CirculoVision(this);
 
@@ -90,6 +113,11 @@ var GameLayer = cc.Layer.extend({
             onKeyPressed: this.teclaPulsada,
             onKeyReleased: this.teclaLevantada
         }, this);
+
+        if (circuloVisionActivado)
+            this.circuloVision.activar();
+
+        capaActual = this;
 
         return true;
 
@@ -113,7 +141,7 @@ var GameLayer = cc.Layer.extend({
 
         if (this.tiempoAturdimiento <= 0 && this.tiempoAturdimiento != -1) {
             for (var zombie of this.zombies) {
-               zombie.multVelocidad = 1.0;
+                zombie.multVelocidad = 1.0;
             }
             this.tiempoAturdimiento = -1;
         }
@@ -155,6 +183,7 @@ var GameLayer = cc.Layer.extend({
         // abajo
         if (this.tecla === 83 || this.orientacionPad === PAD_ABAJO) {
             this.moverPersonajeAbajo(this.caballero);
+            //this.capaACambiar = "mapa1_tmx";
         }
 
         // ninguna pulsada
@@ -197,9 +226,32 @@ var GameLayer = cc.Layer.extend({
             }
         }
         this.formasEliminar = [];
+
+        if (this.capaACambiar != null) {
+            capas[this.nombreMapa] = this;
+            if (capas[res[this.capaACambiar]]) {
+                capas[res[this.capaACambiar]].caballero.mirarAbajo();
+                capaActual = capas[res[this.capaACambiar]];
+                this.getParent().addChild(capaActual, -1, idCapaJuego);
+            } else {
+                capaActual = new GameLayer(this.scene, res[this.capaACambiar], this.activarCirculoVision);
+                this.getParent().addChild(capaActual, -1, idCapaJuego);
+            }
+            this.getParent().removeChild(this, false);
+            this.capaACambiar = null;
+        }
+
+        if (capaActual === this) {
+            if (this.caballero.layer !== this) {
+                if (this.ultimaPosicionCaballero != null)
+                    this.caballero.cambiarCapa(this.space, cc.p(this.ultimaPosicionCaballero.x, this.ultimaPosicionCaballero.y), this);
+            } else {
+                this.ultimaPosicionCaballero = cc.p(this.caballero.body.p.x, this.caballero.body.p.y);
+            }
+        }
     },
     cargarMapa: function () {
-        this.mapa = new cc.TMXTiledMap(res.mapa1_tmx);
+        this.mapa = new cc.TMXTiledMap(this.nombreMapa);
         // Añadirlo a la Layer
         this.addChild(this.mapa);
         // Ancho del mapa
@@ -209,73 +261,161 @@ var GameLayer = cc.Layer.extend({
 
         // Solicitar los objeto dentro de la capa Limites
         var grupoLimites = this.mapa.getObjectGroup("Limites");
-        var limitesArray = grupoLimites.getObjects();
+        if (grupoLimites != null) {
+            var limitesArray = grupoLimites.getObjects();
 
-        // Los objetos de la capa limites
-        // formas estáticas de Chipmunk ( SegmentShape ).
-        for (var i = 0; i < limitesArray.length; i++) {
-            var limite = limitesArray[i];
-            var puntos = limite.polylinePoints;
-            for (var j = 0; j < puntos.length - 1; j++) {
-                var bodyLimite = new cp.StaticBody();
+            // Los objetos de la capa limites
+            // formas estáticas de Chipmunk ( SegmentShape ).
+            for (var i = 0; i < limitesArray.length; i++) {
+                var limite = limitesArray[i];
+                var puntos = limite.polylinePoints;
+                for (var j = 0; j < puntos.length - 1; j++) {
+                    var bodyLimite = new cp.StaticBody();
 
-                var shapeLimite = new cp.SegmentShape(bodyLimite,
-                    cp.v(parseInt(limite.x) + parseInt(puntos[j].x),
-                        parseInt(limite.y) - parseInt(puntos[j].y)),
-                    cp.v(parseInt(limite.x) + parseInt(puntos[j + 1].x),
-                        parseInt(limite.y) - parseInt(puntos[j + 1].y)),
-                    1);
+                    var shapeLimite = new cp.SegmentShape(bodyLimite,
+                        cp.v(parseInt(limite.x) + parseInt(puntos[j].x),
+                            parseInt(limite.y) - parseInt(puntos[j].y)),
+                        cp.v(parseInt(limite.x) + parseInt(puntos[j + 1].x),
+                            parseInt(limite.y) - parseInt(puntos[j + 1].y)),
+                        1);
 
-                shapeLimite.setFriction(1);
-                shapeLimite.setElasticity(0);
-                this.space.addStaticShape(shapeLimite);
+                    shapeLimite.setFriction(1);
+                    shapeLimite.setElasticity(0);
+                    this.space.addStaticShape(shapeLimite);
+                }
             }
         }
-        var grupoLlaves = this.mapa.getObjectGroup("llaves");
-        var llavesArray = grupoLlaves.getObjects();
 
-        for (var i = 0; i < llavesArray.length; i++) {
-            var llave = new Llave(this,
-                cc.p(llavesArray[i]["x"], llavesArray[i]["y"]),
-                llavesArray[i]["width"], llavesArray[i]["height"]);
-            this.llaves.push(llave);
+        var grupoLlaves = this.mapa.getObjectGroup("llaves");
+        if (grupoLlaves != null) {
+            var llavesArray = grupoLlaves.getObjects();
+
+            for (var i = 0; i < llavesArray.length; i++) {
+                var llave = new Llave(this,
+                    cc.p(llavesArray[i]["x"], llavesArray[i]["y"]),
+                    llavesArray[i]["width"], llavesArray[i]["height"]);
+                this.llaves.push(llave);
+            }
         }
 
         var grupoCajasTurbo = this.mapa.getObjectGroup("cajasturbo");
-        var cajasTurboArray = grupoCajasTurbo.getObjects();
+        if (grupoCajasTurbo != null) {
+            var cajasTurboArray = grupoCajasTurbo.getObjects();
 
-        for (var i = 0; i < cajasTurboArray.length; i++) {
-            var cajaTurbo = new CajaTurbo(this,
-                cc.p(cajasTurboArray[i]["x"], cajasTurboArray[i]["y"]),
-                cajasTurboArray[i]["width"], cajasTurboArray[i]["height"]);
-            this.cajasTurbo.push(cajaTurbo);
+            for (var i = 0; i < cajasTurboArray.length; i++) {
+                var cajaTurbo = new CajaTurbo(this,
+                    cc.p(cajasTurboArray[i]["x"], cajasTurboArray[i]["y"]),
+                    cajasTurboArray[i]["width"], cajasTurboArray[i]["height"]);
+                this.cajasTurbo.push(cajaTurbo);
+            }
         }
 
         var grupoCajasAturd = this.mapa.getObjectGroup("cajasaturdimiento");
-        var cajasAturdArray = grupoCajasAturd.getObjects();
+        if (grupoCajasAturd != null) {
+            var cajasAturdArray = grupoCajasAturd.getObjects();
 
-        for (var i = 0; i < cajasAturdArray.length; i++) {
-            var cajaAturd = new CajaAturdimiento(this,
-                cc.p(cajasAturdArray[i]["x"], cajasAturdArray[i]["y"]),
-                cajasAturdArray[i]["width"], cajasAturdArray[i]["height"]);
-            this.cajasAturdimiento.push(cajaAturd);
+            for (var i = 0; i < cajasAturdArray.length; i++) {
+                var cajaAturd = new CajaAturdimiento(this,
+                    cc.p(cajasAturdArray[i]["x"], cajasAturdArray[i]["y"]),
+                    cajasAturdArray[i]["width"], cajasAturdArray[i]["height"]);
+                this.cajasAturdimiento.push(cajaAturd);
+            }
         }
 
         var grupoCajasVida = this.mapa.getObjectGroup("cajasvida");
-        var cajaVidasArray = grupoCajasVida.getObjects();
+        if (grupoCajasVida != null) {
+            var cajaVidasArray = grupoCajasVida.getObjects();
 
-        for (var i = 0; i < cajaVidasArray.length; i++) {
-            var estaCajaVida = new CajaVida(this,
-                cc.p(cajaVidasArray[i]["x"], cajaVidasArray[i]["y"]),
-                cajaVidasArray[i]["width"], cajaVidasArray[i]["height"]);
-            this.cajasVida.push(estaCajaVida);
+            for (var i = 0; i < cajaVidasArray.length; i++) {
+                var estaCajaVida = new CajaVida(this,
+                    cc.p(cajaVidasArray[i]["x"], cajaVidasArray[i]["y"]),
+                    cajaVidasArray[i]["width"], cajaVidasArray[i]["height"]);
+                this.cajasVida.push(estaCajaVida);
+            }
         }
 
         var grupoZombies = this.mapa.getObjectGroup("zombies");
-        var zombiesArray = grupoZombies.getObjects();
+        if (grupoZombies != null) {
+            var zombiesArray = grupoZombies.getObjects();
 
-        for (var i = 0; i < zombiesArray.length; i++) {
-            this.zombies.push(new Zombie(zombiesArray[i].name == "v", this.space, cc.p(zombiesArray[i]["x"], zombiesArray[i]["y"]), this));
+            for (var i = 0; i < zombiesArray.length; i++) {
+                this.zombies.push(new Zombie(zombiesArray[i].name == "v", this.space, cc.p(zombiesArray[i]["x"], zombiesArray[i]["y"]), this));
+            }
+        }
+
+        var grupoEntradasCasas = this.mapa.getObjectGroup("entradascasas");
+        if (grupoEntradasCasas != null) {
+            var entradasCasasArray = grupoEntradasCasas.getObjects();
+            for (var i = 0; i < entradasCasasArray.length; i++) {
+                var entradaCasa = entradasCasasArray[i];
+                var puntos = entradaCasa.polylinePoints;
+                for (var j = 0; j < puntos.length - 1; j++) {
+                    var bodyLimite = new cp.StaticBody();
+
+                    var shapeEntradaCasa = new cp.SegmentShape(bodyLimite,
+                        cp.v(parseInt(entradaCasa.x) + parseInt(puntos[j].x),
+                            parseInt(entradaCasa.y) - parseInt(puntos[j].y)),
+                        cp.v(parseInt(entradaCasa.x) + parseInt(puntos[j + 1].x),
+                            parseInt(entradaCasa.y) - parseInt(puntos[j + 1].y)),
+                        1);
+
+                    shapeEntradaCasa.setFriction(1);
+                    shapeEntradaCasa.setElasticity(0);
+                    shapeEntradaCasa.setCollisionType(tipoEntradaCasa);
+                    this.space.addStaticShape(shapeEntradaCasa);
+                    this.entradasCasas.push(new Puerta(shapeEntradaCasa, entradaCasa.name));
+                }
+            }
+        }
+
+        var grupoEntradasCuevas = this.mapa.getObjectGroup("entradascuevas");
+        if (grupoEntradasCuevas != null) {
+            var entradasCuevasArray = grupoEntradasCuevas.getObjects();
+            for (var i = 0; i < entradasCuevasArray.length; i++) {
+                var entradaCueva = entradasCuevasArray[i];
+                var puntos = entradaCueva.polylinePoints;
+                for (var j = 0; j < puntos.length - 1; j++) {
+                    var bodyLimite = new cp.StaticBody();
+
+                    var shapeEntradaCueva = new cp.SegmentShape(bodyLimite,
+                        cp.v(parseInt(entradaCueva.x) + parseInt(puntos[j].x),
+                            parseInt(entradaCueva.y) - parseInt(puntos[j].y)),
+                        cp.v(parseInt(entradaCueva.x) + parseInt(puntos[j + 1].x),
+                            parseInt(entradaCueva.y) - parseInt(puntos[j + 1].y)),
+                        1);
+
+                    shapeEntradaCueva.setFriction(1);
+                    shapeEntradaCueva.setElasticity(0);
+                    shapeEntradaCueva.setCollisionType(tipoEntradaCueva);
+                    this.space.addStaticShape(shapeEntradaCueva);
+                    this.entradasCuevas.push(new Puerta(shapeEntradaCueva, entradaCueva.name));
+                }
+            }
+        }
+
+        var grupoPuertasSalidas = this.mapa.getObjectGroup("puertassalidas");
+        if (grupoPuertasSalidas != null) {
+            var puertasSalidasArray = grupoPuertasSalidas.getObjects();
+            for (var i = 0; i < puertasSalidasArray.length; i++) {
+                var puertasalida = puertasSalidasArray[i];
+                var puntos = puertasalida.polylinePoints;
+                for (var j = 0; j < puntos.length - 1; j++) {
+                    var bodyLimite = new cp.StaticBody();
+
+                    var shapePuertaSalida = new cp.SegmentShape(bodyLimite,
+                        cp.v(parseInt(puertasalida.x) + parseInt(puntos[j].x),
+                            parseInt(puertasalida.y) - parseInt(puntos[j].y)),
+                        cp.v(parseInt(puertasalida.x) + parseInt(puntos[j + 1].x),
+                            parseInt(puertasalida.y) - parseInt(puntos[j + 1].y)),
+                        1);
+
+                    shapePuertaSalida.setFriction(1);
+                    shapePuertaSalida.setElasticity(0);
+                    shapePuertaSalida.setCollisionType(tipoPuertaSalida);
+                    this.space.addStaticShape(shapePuertaSalida);
+                    this.salidas.push(new Puerta(shapePuertaSalida, puertasalida.name));
+                }
+            }
         }
     },
     teclaPulsada: function (keyCode, event) {
@@ -398,7 +538,51 @@ var GameLayer = cc.Layer.extend({
         this.tiempoAturdimiento = 3;
         this.formasEliminar.push(shapes[1]);
     },
-    colisionZombie: function(arbiter, space) {
+    colisionJugadorConEntradaCasa: function (arbiter, space) {
+        this.entrarEnCasaCueva(arbiter, space, this.entradasCasas, false);
+    },
+    colisionJugadorConEntradaCueva: function (arbiter, space) {
+        this.entrarEnCasaCueva(arbiter, space, this.entradasCuevas, true);
+    },
+    colisionJugadorConSalida: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+        var shapeEntradaCasa = shapes[1];
+        var nombreMapaCasa = this.salidas.filter(ec => ec.shape === shapeEntradaCasa)[0].name;
+
+        if (!this.caballero.mirandoHaciaArriba() && !this.caballero.quieto()) {
+            this.capaACambiar = nombreMapaCasa + "_tmx";
+            this.activarCirculoVision = false;
+            this.yaEntradoEnCapa = true;
+
+            capas[res[this.capaACambiar]].caballero.moverAbajo();
+            capas[res[this.capaACambiar]].detenerCaballero = true;
+            capas[res[this.capaACambiar]].tecla = 0;
+            capas[res[this.capaACambiar]].orientacionPad = 0;
+
+            // capas[res[this.capaACambiar]].yaEntradoEnCapa = false;
+        }
+    },
+    entrarEnCasaCueva: function (arbiter, space, entradasArray, activarCirculoVision) {
+        if (this.caballero.mirandoHaciaArriba()) {
+            var shapes = arbiter.getShapes();
+            var shapeEntradaCasa = shapes[1];
+            var nombreMapaCasa = entradasArray.filter(ec => ec.shape === shapeEntradaCasa)[0].name;
+
+            if (this.caballero.mirandoHaciaArriba()) {
+                this.capaACambiar = nombreMapaCasa + "_tmx";
+                this.activarCirculoVision = activarCirculoVision;
+                this.yaEntradoEnCapa = true;
+
+                if (capas.hasOwnProperty(res[this.capaACambiar])) {
+                    capas[res[this.capaACambiar]].caballero.moverArriba();
+                    capas[res[this.capaACambiar]].detenerCaballero = true;
+                    capas[res[this.capaACambiar]].tecla = 0;
+                    capas[res[this.capaACambiar]].orientacionPad = 0;
+                }
+            }
+        }
+    },
+    colisionZombie: function (arbiter, space) {
         var shapes = arbiter.getShapes();
         if (shapes[0].collision_type === tipoEnemigo) {
             var x = shapes[0].body.p.x;
@@ -420,7 +604,7 @@ var idCapaControles = 2;
 var GameScene = cc.Scene.extend({
     onEnter: function () {
         this._super();
-        var layer = new GameLayer(this);
+        var layer = new GameLayer(this, res.mapa1_tmx);
         this.addChild(layer, 0, idCapaJuego);
 
         var controlesLayer = new ControlesLayer(this);

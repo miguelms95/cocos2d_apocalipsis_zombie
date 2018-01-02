@@ -107,6 +107,17 @@ var Caballero = cc.Class.extend({
         layer.addChild(this.sprite, 10);
 
     },
+    cambiarCapa: function(space, posicion, layer) {
+        this.space.removeShape(this.shape);
+        this.space.removeBody(this.body);
+        this.layer.removeChild(this.sprite);
+        this.space = space;
+        this.layer = layer;
+        this.space.addShape(this.shape);
+        this.space.addBody(this.body);
+        this.body.setPos(posicion);
+        layer.addChild(this.sprite, 10);
+    },
     moverIzquierda: function() {
         if (this.animacion != this.animacionIzquierda) {
             this.sprite.stopAllActions();
@@ -168,5 +179,17 @@ var Caballero = cc.Class.extend({
 
         this.body.vx = 0;
         this.body.vy = 0;
+    },
+    mirandoHaciaArriba: function() {
+        return this.animacion === this.animacionArriba;
+    },
+    mirarAbajo: function() {
+        this.animacion = this.animacionAbajo;
+    },
+    mirarArriba: function() {
+        this.animacion = this.animacionArriba;
+    },
+    quieto: function() {
+        return this.animacion === this.animacionQuieto;
     }
 });

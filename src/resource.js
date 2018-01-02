@@ -4,6 +4,7 @@ var res = {
     menu_titulo_png : "res/menu_titulo.png",
     tiles16_png: "res/tiles16.png",
     mapa1_tmx: "res/mapa1.tmx",
+    mapacasa_tmx: "res/mapacasa.tmx",
     caballero_png: "res/caballero.png",
     caballero_plist: "res/caballero.plist",
     llaves_plist: "res/llaves.plist",
