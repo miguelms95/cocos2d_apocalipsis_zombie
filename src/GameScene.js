@@ -232,6 +232,10 @@ var GameLayer = cc.Layer.extend({
             if (capas[res[this.capaACambiar]]) {
                 capas[res[this.capaACambiar]].caballero.mirarAbajo();
                 capaActual = capas[res[this.capaACambiar]];
+                if (this.activarCirculoVision)
+                    capaActual.circuloVision.activar();
+                else
+                    capaActual.circuloVision.desactivar();
                 this.getParent().addChild(capaActual, -1, idCapaJuego);
             } else {
                 capaActual = new GameLayer(this.scene, res[this.capaACambiar], this.activarCirculoVision);
