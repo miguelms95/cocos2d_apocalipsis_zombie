@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="16" tileheight="16" nextobjectid="14">
- <tileset firstgid="1" source="Roguelike.tsx"/>
+ <tileset firstgid="0" source="config_tile_casa.tsx"/>
  <layer name="Terreno base" width="60" height="20">
   <data encoding="csv">
 1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,1273,

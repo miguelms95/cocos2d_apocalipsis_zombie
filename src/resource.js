@@ -28,7 +28,7 @@ var res = {
     caja_aturdimiento_png: "res/caja_aturdimiento.png",
     bloque_destruible_png: "res/caja_destruible.png",
     boton_reanudar_png: "res/boton_reanudar.png",
-    roguelike_tsx: "res/Roguelike.tsx"
+    config_tile_casa_tsx: "res/config_tile_casa.tsx"
 };
 
 var g_resources = [];
