@@ -11,6 +11,7 @@ var tipoCajaAturdimiento = 6;
 var tipoEntradaCasa = 7;
 var tipoEntradaCueva = 8;
 var tipoPuertaSalida = 9;
+var tipoPersona = 10;
 
 var capas = {};
 var capaActual = null;
@@ -45,6 +46,7 @@ var GameLayer = cc.Layer.extend({
     activarCirculoVision: false,
     yaEntradoEnCapa: false,
     ultimaPosicionCaballero: null,
+    personas: [],
 
     ctor: function (scene, nombreMapa, circuloVisionActivado = false) {
         this._super();
@@ -86,6 +88,9 @@ var GameLayer = cc.Layer.extend({
 
         this.space.addCollisionHandler(tipoJugador, tipoPuertaSalida,
             null, null, this.colisionJugadorConSalida.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoPersona,
+            null, null, this.colisionJugadorConPersona.bind(this), null);
 
         this.space.setDefaultCollisionHandler(
             null, null, this.colisionZombie.bind(this), null);
@@ -434,10 +439,27 @@ var GameLayer = cc.Layer.extend({
                 }
             }
         }
+
+        var grupoPersonas = this.mapa.getObjectGroup("personas");
+        if (grupoPersonas != null) {
+            var personasArray = grupoPersonas.getObjects();
+            for (var i = 0; i < personasArray.length; i++) {
+                var persona = personasArray[i];
+                this.personas.push(new Persona(this, this.space, cc.p(persona["x"], persona["y"]), persona["name"]));
+            }
+        }
     },
     teclaPulsada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
         instancia.tecla = keyCode;
+        
+        var controlesLayer = instancia.getParent().getChildByTag(idCapaControles);
+
+        if (controlesLayer.mostrandoDialogo && keyCode != 87) { // letra T
+            cc.director.resume();
+            instancia.caballero.moverAbajo();
+            controlesLayer.ocultarDialogo();
+        }
     },
     moverPersonajeIzquierda: function (personaje) {
         if (personaje.body.p.x > personaje.sprite.getContentSize().width / 2) {
@@ -577,6 +599,35 @@ var GameLayer = cc.Layer.extend({
             capas[res[this.capaACambiar]].orientacionPad = 0;
 
             // capas[res[this.capaACambiar]].yaEntradoEnCapa = false;
+        }
+    },
+    colisionJugadorConPersona: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+        var shapeJugador = shapes[0];
+        var shapePersona = shapes[1];
+        
+        var persona = this.personas.filter(p => p.shape === shapePersona)[0];
+
+        var puntoMedioJugador = this.caballero.body.p.x + this.caballero.ancho / 2;
+        var puntoMedioPersona = persona.body.p.x + persona.ancho / 2;
+
+        if (shapeJugador.body.p.y <= shapePersona.body.p.y &&
+                Math.abs(puntoMedioJugador - puntoMedioPersona) <= 14) {
+            if (this.caballero.mirandoHaciaArriba()) {
+                var controlesLayer = this.getParent().getChildByTag(idCapaControles);
+                var personaNameParts = persona.frase.split(";");
+                var frasePersona = personaNameParts[1];
+                var personaDaLlave = (personaNameParts[0] == 'true');
+
+                if (persona.yahablado && personaDaLlave) {
+                    frasePersona = personaNameParts[2];
+                    personaDaLlave = false;
+                } else {    
+                    persona.yahablado = true;
+                }
+
+                controlesLayer.mostrarDialogo(frasePersona, personaDaLlave);
+            }
         }
     },
     entrarEnCasaCueva: function (arbiter, space, entradasArray, activarCirculoVision) {

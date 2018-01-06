@@ -26,6 +26,7 @@
         "src/CajaAturdimiento.js",
         "src/GameOverLayer.js",
         "src/Puerta.js",
-        "src/BloqueDestruible.js"
+        "src/BloqueDestruible.js",
+        "src/Persona.js"
     ]
 }

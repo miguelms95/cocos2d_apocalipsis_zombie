@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" nextobjectid="38">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="16" tileheight="16" nextobjectid="45">
  <tileset firstgid="1" name="tiles16" tilewidth="16" tileheight="16" spacing="1" tilecount="1767" columns="57">
   <image source="tiles16.png" width="968" height="526"/>
  </tileset>
@@ -68,6 +68,10 @@
   <object id="37" name="mapacasa" x="472" y="260">
    <polyline points="0,0 14.6667,-1.33333"/>
   </object>
+ </objectgroup>
+ <objectgroup name="personas">
+  <object id="41" name="true;Aquí tienes una llave;Ya no tengo nada más que darte" x="280" y="90.6667"/>
+  <object id="42" name="false;Hace un día espléndido, ¿verdad?" x="345.333" y="825.333"/>
  </objectgroup>
  <objectgroup name="bloques_destruibles">
   <object id="30" x="558.667" y="366.667" width="16" height="16"/>

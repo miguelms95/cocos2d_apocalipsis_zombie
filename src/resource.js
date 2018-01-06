@@ -28,7 +28,8 @@ var res = {
     caja_aturdimiento_png: "res/caja_aturdimiento.png",
     bloque_destruible_png: "res/caja_destruible.png",
     boton_reanudar_png: "res/boton_reanudar.png",
-    config_tile_casa_tsx: "res/config_tile_casa.tsx"
+    config_tile_casa_tsx: "res/config_tile_casa.tsx",
+    persona_png: "res/persona.png"
 };
 
 var g_resources = [];

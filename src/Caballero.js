@@ -14,6 +14,8 @@ var Caballero = cc.Class.extend({
     llaves: 0,
     vidas: vidasJugador,
     cargasTurbo:0,
+    ancho: null,
+    alto: null,
 
     ctor: function(space, posicion, layer) {
         this.space = space;
@@ -33,10 +35,13 @@ var Caballero = cc.Class.extend({
         // Se añade el cuerpo al espacio
         this.space.addBody(this.body);
 
+        this.ancho = this.sprite.getContentSize().width;
+        this.alto = this.sprite.getContentSize().height;
+
         // forma
         this.shape = new cp.BoxShape(this.body,
-            this.sprite.getContentSize().width,
-            this.sprite.getContentSize().height);
+            this.ancho,
+            this.alto);
 
         this.shape.setFriction(1);
         this.shape.setElasticity(0);
