@@ -24,6 +24,7 @@ var Caballero = cc.Class.extend({
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite("#caballero_quieto_01.png");
+        this.sprite.setScale(0.5, 0.5);
         // Cuerpo dinamico, SI le afectan las fuerzas
         this.body = new cp.Body(5, Infinity);
 
