@@ -281,7 +281,7 @@ var GameLayer = cc.Layer.extend({
 
                     space.addPostStepCallback(function () {
                         space.removeBody(disparo.body);
-                        space.removeShape(shapeDisparo);
+                        space.removeShape(disparo.shape);
                     });
                 }
         }
