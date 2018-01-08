@@ -6,6 +6,7 @@ var res = {
     mapa1_tmx: "res/mapa1.tmx",
     mapa2_tmx: "res/mapa2.tmx",
     mapacasa_tmx: "res/mapacasa.tmx",
+    mapacueva_tmx: "res/mapacueva.tmx",
     caballero_png: "res/caballero.png",
     caballero_plist: "res/caballero.plist",
     llaves_plist: "res/llaves.plist",
