@@ -4,6 +4,7 @@ var res = {
     menu_titulo_png : "res/menu_titulo.png",
     tiles16_png: "res/tiles16.png",
     mapa1_tmx: "res/mapa1.tmx",
+    mapa2_tmx: "res/mapa2.tmx",
     mapacasa_tmx: "res/mapacasa.tmx",
     caballero_png: "res/caballero.png",
     caballero_plist: "res/caballero.plist",
@@ -28,7 +29,6 @@ var res = {
     caja_aturdimiento_png: "res/caja_aturdimiento.png",
     bloque_destruible_png: "res/caja_destruible.png",
     boton_reanudar_png: "res/boton_reanudar.png",
-    config_tile_casa_tsx: "res/config_tile_casa.tsx",
     persona_png: "res/persona.png"
 };
 
