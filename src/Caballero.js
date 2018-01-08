@@ -36,8 +36,8 @@ var Caballero = cc.Class.extend({
         // Se añade el cuerpo al espacio
         this.space.addBody(this.body);
 
-        this.ancho = this.sprite.getContentSize().width;
-        this.alto = this.sprite.getContentSize().height;
+        this.ancho = this.sprite.getContentSize().width * 0.5;
+        this.alto = this.sprite.getContentSize().height * 0.5;
 
         // forma
         this.shape = new cp.BoxShape(this.body,
