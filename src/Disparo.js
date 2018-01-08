@@ -7,9 +7,7 @@ var Disparo = cc.Class.extend({
         var factorEscala = 0.2;
         this.sprite = new cc.PhysicsSprite(res.disparo_png);
         this.sprite.setScale(factorEscala, factorEscala);
-        this.body = new cp.Body(5, cp.momentForBox(1,
-            this.sprite.getContentSize().width * factorEscala,
-            this.sprite.getContentSize().height * factorEscala));
+        this.body = new cp.Body(5, Infinity);
         this.body.setPos(posicion);
         this.body.setAngle(0);
 

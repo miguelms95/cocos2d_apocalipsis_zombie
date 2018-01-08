@@ -13,6 +13,7 @@ var tipoEntradaCueva = 8;
 var tipoPuertaSalida = 9;
 var tipoPersona = 10;
 var tipoDisparo = 11;
+var tipoLimite = 12;
 
 var capas = {};
 var capaActual = null;
@@ -296,6 +297,7 @@ var GameLayer = cc.Layer.extend({
 
                     shapeLimite.setFriction(1);
                     shapeLimite.setElasticity(0);
+                    shapeLimite.setCollisionType(tipoLimite);
                     this.space.addStaticShape(shapeLimite);
                 }
             }
@@ -666,6 +668,27 @@ var GameLayer = cc.Layer.extend({
                     //zombie.girar();
                     break;
                 }
+            }
+        }
+
+        if (shapes[0].collision_type === tipoDisparo &&
+                shapes[1].collision_type !== tipoEnemigo
+                && shapes[1].collision_type !== tipoJugador) {
+            var shapeDisparo = shapes[0];
+            var disparo = null;
+            var posDisparo = -1;
+
+            for (var i = 0; i < this.disparos.length; i++) {
+                if (this.disparos[i].shape === shapeDisparo) {
+                    disparo = this.disparos[i];
+                    posDisparo = i;
+                    break;
+                }
+            }
+
+            if (disparo != null) {
+                this.removeChild(disparo.sprite);
+                this.disparos.splice(posDisparo, 1);
             }
         }
     },
