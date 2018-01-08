@@ -14,6 +14,7 @@ var tipoPuertaSalida = 9;
 var tipoPersona = 10;
 var tipoDisparo = 11;
 var tipoLimite = 12;
+var tipoPersona = 13;
 
 var capas = {};
 var capaActual = null;
@@ -97,6 +98,9 @@ var GameLayer = cc.Layer.extend({
 
         this.space.addCollisionHandler(tipoDisparo, tipoEnemigo,
             null, null, this.colisionDisparoConEnemigo.bind(this), null);
+
+        this.space.addCollisionHandler(tipoDisparo, tipoPersona,
+            null, null, this.colisionDisparoConPersona.bind(this), null);
 
         this.space.setDefaultCollisionHandler(
             null, null, this.colisionZombie.bind(this), null);
@@ -459,7 +463,7 @@ var GameLayer = cc.Layer.extend({
     teclaPulsada: function (keyCode, event) {
         var instancia = event.getCurrentTarget();
         instancia.tecla = keyCode;
-        
+
         var controlesLayer = instancia.getParent().getChildByTag(idCapaControles);
 
         if (controlesLayer.mostrandoDialogo && keyCode != 87) { // letra T
@@ -612,14 +616,14 @@ var GameLayer = cc.Layer.extend({
         var shapes = arbiter.getShapes();
         var shapeJugador = shapes[0];
         var shapePersona = shapes[1];
-        
+
         var persona = this.personas.filter(p => p.shape === shapePersona)[0];
 
         var puntoMedioJugador = this.caballero.body.p.x + this.caballero.ancho / 2;
         var puntoMedioPersona = persona.body.p.x + persona.ancho / 2;
 
         if (shapeJugador.body.p.y <= shapePersona.body.p.y &&
-                Math.abs(puntoMedioJugador - puntoMedioPersona) <= 14) {
+            Math.abs(puntoMedioJugador - puntoMedioPersona) <= 14) {
             if (this.caballero.mirandoHaciaArriba()) {
                 var controlesLayer = this.getParent().getChildByTag(idCapaControles);
                 var personaNameParts = persona.frase.split(";");
@@ -629,7 +633,7 @@ var GameLayer = cc.Layer.extend({
                 if (persona.yahablado && personaDaLlave) {
                     frasePersona = personaNameParts[2];
                     personaDaLlave = false;
-                } else {    
+                } else {
                     persona.yahablado = true;
                 }
 
@@ -672,8 +676,8 @@ var GameLayer = cc.Layer.extend({
         }
 
         if (shapes[0].collision_type === tipoDisparo &&
-                shapes[1].collision_type !== tipoEnemigo
-                && shapes[1].collision_type !== tipoJugador) {
+            shapes[1].collision_type !== tipoEnemigo &&
+            shapes[1].collision_type !== tipoJugador) {
             var shapeDisparo = shapes[0];
             var disparo = null;
             var posDisparo = -1;
@@ -695,6 +699,31 @@ var GameLayer = cc.Layer.extend({
                     space.removeShape(shapeDisparo);
                 });
             }
+        }
+    },
+    colisionDisparoConPersona: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+        var shapeDisparo = shapes[0];
+
+        var disparo = null;
+        var posDisparo = -1;
+
+        for (var i = 0; i < this.disparos.length; i++) {
+            if (this.disparos[i].shape === shapeDisparo) {
+                disparo = this.disparos[i];
+                posDisparo = i;
+                break;
+            }
+        }
+
+        if (disparo != null) {
+            this.removeChild(disparo.sprite);
+            this.disparos.splice(posDisparo, 1);
+
+            space.addPostStepCallback(function () {
+                space.removeBody(disparo.body);
+                space.removeShape(shapeDisparo);
+            });
         }
     },
     colisionDisparoConEnemigo: function (arbiter, space) {

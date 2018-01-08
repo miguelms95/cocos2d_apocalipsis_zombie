@@ -23,14 +23,12 @@ var Persona = cc.Class.extend({
             this.ancho,
             this.alto);
 
-        this.shape.setFriction(1);
-        this.shape.setElasticity(0);
-        this.shape.setCollisionType(tipoEnemigo);
+        this.shape.setSensor(false);
         this.shape.setCollisionType(tipoPersona);
 
         // forma dinamica
         space.addStaticShape(this.shape);
 
-        layer.addChild(this.sprite);
+        layer.addChild(this.sprite, 10);
     }
 });
