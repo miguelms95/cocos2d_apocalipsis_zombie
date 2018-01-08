@@ -793,7 +793,7 @@ var idCapaControles = 2;
 var GameScene = cc.Scene.extend({
     onEnter: function () {
         this._super();
-        var layer = new GameLayer(this, res.mapa1_tmx);
+        var layer = new GameLayer(this, res.mapa2_tmx);
         this.addChild(layer, 0, idCapaJuego);
 
         var controlesLayer = new ControlesLayer(this);

@@ -1,3 +1,7 @@
+var IZQUIERDA = 3;
+var DERECHA = 1;
+var ARRIBA = 4;
+var ABAJO = 2;
 var Caballero = cc.Class.extend({
     space: null,
     sprite: null,
@@ -9,17 +13,19 @@ var Caballero = cc.Class.extend({
     animacionIzquierda: null,
     animacionArriba: null,
     animacionAbajo: null,
-    multVelocidad:null,
+    multVelocidad: null,
     animacion: null, // Actuals
     llaves: 0,
     vidas: vidasJugador,
-    cargasTurbo:0,
+    cargasTurbo: 0,
     ancho: null,
     alto: null,
+    orientacion: null,
 
-    ctor: function(space, posicion, layer) {
+    ctor: function (space, posicion, layer) {
         this.space = space;
         this.layer = layer;
+        this.orientacion = ABAJO;
         this.multVelocidad = 1.0;
 
         // Crear Sprite - Cuerpo y forma
@@ -113,7 +119,7 @@ var Caballero = cc.Class.extend({
         layer.addChild(this.sprite, 10);
 
     },
-    cambiarCapa: function(space, posicion, layer) {
+    cambiarCapa: function (space, posicion, layer) {
         this.space.removeShape(this.shape);
         this.space.removeBody(this.body);
         this.layer.removeChild(this.sprite);
@@ -124,50 +130,49 @@ var Caballero = cc.Class.extend({
         this.body.setPos(posicion);
         layer.addChild(this.sprite, 10);
     },
-    moverIzquierda: function() {
+    moverIzquierda: function () {
         if (this.animacion != this.animacionIzquierda) {
             this.sprite.stopAllActions();
             this.animacion = this.animacionIzquierda;
             this.sprite.runAction(this.animacion);
+            this.orientacion = IZQUIERDA;
         }
-
         this.body.vy = 0;
         if (this.body.vx > -100 * this.multVelocidad) {
             this.body.applyImpulse(cp.v(-100 * this.multVelocidad, 0), cp.v(0, 0));
         }
-
     },
-    moverDerecha: function() {
+    moverDerecha: function () {
         if (this.animacion != this.animacionDerecha) {
             this.sprite.stopAllActions();
             this.animacion = this.animacionDerecha;
             this.sprite.runAction(this.animacion);
+            this.orientacion = DERECHA;
         }
-
         this.body.vy = 0;
         if (this.body.vx < 100 * this.multVelocidad) {
             this.body.applyImpulse(cp.v(100 * this.multVelocidad, 0), cp.v(0, 0));
         }
-
     },
-    moverArriba: function() {
+    moverArriba: function () {
         if (this.animacion != this.animacionArriba) {
             this.sprite.stopAllActions();
             this.animacion = this.animacionArriba;
             this.sprite.runAction(this.animacion);
+            this.orientacion = ARRIBA;
         }
 
         this.body.vx = 0;
         if (this.body.vy < 100 * this.multVelocidad) {
             this.body.applyImpulse(cp.v(0, 100 * this.multVelocidad), cp.v(0, 0));
         }
-
     },
-    moverAbajo: function() {
+    moverAbajo: function () {
         if (this.animacion != this.animacionAbajo) {
             this.sprite.stopAllActions();
             this.animacion = this.animacionAbajo;
             this.sprite.runAction(this.animacion);
+            this.orientacion = ABAJO;
         }
 
         this.body.vx = 0;
@@ -176,29 +181,36 @@ var Caballero = cc.Class.extend({
         }
 
     },
-    detener: function() {
+    detener: function () {
         if (this.animacion != this.animacionQuieto) {
             this.sprite.stopAllActions();
             this.animacion = this.animacionQuieto;
             this.sprite.runAction(this.animacion);
+            this.orientacion = ABAJO;
         }
-
         this.body.vx = 0;
         this.body.vy = 0;
     },
-    mirandoHaciaArriba: function() {
+    mirandoHaciaArriba: function () {
         return this.animacion === this.animacionArriba;
     },
-    mirarAbajo: function() {
+    mirarAbajo: function () {
         this.animacion = this.animacionAbajo;
     },
-    mirarArriba: function() {
+    mirarArriba: function () {
         this.animacion = this.animacionArriba;
     },
-    quieto: function() {
+    quieto: function () {
         return this.animacion === this.animacionQuieto;
     },
-    disparar: function() {
-        this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x + 20, this.body.p.y), this.layer));
+    disparar: function () {
+        if (this.orientacion == DERECHA)
+            this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x + this.ancho, this.body.p.y), this.layer, this.orientacion, new cc.PhysicsSprite(res.disparoRi_png)));
+        else if (this.orientacion == IZQUIERDA)
+            this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x - this.ancho, this.body.p.y), this.layer, this.orientacion, new cc.PhysicsSprite(res.disparoLe_png)));
+        else if (this.orientacion == ARRIBA)
+            this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x, this.body.p.y + this.alto), this.layer, this.orientacion, new cc.PhysicsSprite(res.disparoUp_png)));
+        else
+            this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x, this.body.p.y - this.alto), this.layer, this.orientacion, new cc.PhysicsSprite(res.disparoDo_png)));
     }
 });
