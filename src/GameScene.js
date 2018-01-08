@@ -272,6 +272,7 @@ var GameLayer = cc.Layer.extend({
 
         for (var i = 0; i < this.disparos.length; i++) {
             var disparo = this.disparos[i];
+            var space = this.space;
             if (disparo.body.p.x > this.mapaAncho ||
                 disparo.body.p.x < 0 ||
                 disparo.body.p.y > this.mapaAncho ||
