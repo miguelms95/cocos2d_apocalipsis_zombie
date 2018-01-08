@@ -269,6 +269,22 @@ var GameLayer = cc.Layer.extend({
                 this.ultimaPosicionCaballero = cc.p(this.caballero.body.p.x, this.caballero.body.p.y);
             }
         }
+
+        for (var i = 0; i < this.disparos.length; i++) {
+            var disparo = this.disparos[i];
+            if (disparo.body.p.x > this.mapaAncho ||
+                disparo.body.p.x < 0 ||
+                disparo.body.p.y > this.mapaAncho ||
+                disparo.body.p.y < 0) {
+                    this.removeChild(disparo.sprite);
+                    this.disparos.splice(i, 1);
+
+                    space.addPostStepCallback(function () {
+                        space.removeBody(disparo.body);
+                        space.removeShape(shapeDisparo);
+                    });
+                }
+        }
     },
     cargarMapa: function () {
         this.mapa = new cc.TMXTiledMap(this.nombreMapa);
