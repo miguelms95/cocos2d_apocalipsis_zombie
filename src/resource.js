@@ -1,7 +1,7 @@
 var res = {
-    HelloWorld_png : "res/HelloWorld.png",
-    boton_jugar_png : "res/boton_jugar.png",
-    menu_titulo_png : "res/menu_titulo.png",
+    HelloWorld_png: "res/HelloWorld.png",
+    boton_jugar_png: "res/boton_jugar.png",
+    menu_titulo_png: "res/menu_titulo.png",
     tiles16_png: "res/tiles16.png",
     mapa1_tmx: "res/mapa1.tmx",
     mapa2_tmx: "res/mapa2.tmx",
@@ -16,8 +16,8 @@ var res = {
     zombie_dcha_png: "res/zombieDcha.png",
     zombie_izqda_plist: "res/zombieIzqda.plist",
     zombie_izqda_png: "res/zombieIzqda.png",
-    zombie_vertical_plist:"res/zombieVertical.plist",
-    zombie_vertical_png:"res/zombieVertical.png",
+    zombie_vertical_plist: "res/zombieVertical.plist",
+    zombie_vertical_png: "res/zombieVertical.png",
     llave_gris_png: "res/llave_gris.png",
     llave_activada_png: "res/llave_activada.png",
     vida_png: "res/vida.png",
@@ -32,7 +32,10 @@ var res = {
     boton_reanudar_png: "res/boton_reanudar.png",
     persona_png: "res/persona.png",
     boton_disparar_png: "res/boton_disparar.png",
-    disparo_png: "res/disparo.png"
+    disparoUp_png: "res/disparoUp.png",
+    disparoDo_png: "res/disparoDo.png",
+    disparoRi_png: "res/disparoRi.png",
+    disparoLe_png: "res/disparoLe.png"
 };
 
 var g_resources = [];
