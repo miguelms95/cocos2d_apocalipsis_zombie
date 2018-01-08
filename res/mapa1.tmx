@@ -14,7 +14,7 @@
  </objectgroup>
  <layer name="Terreno sobre terreno" width="60" height="60">
   <data encoding="base64" compression="zlib">
-   eJztmktOwzAQQF13w9WKxAGABXCVIrHrBlgAVwIWwCm4BbbAUhiNP0nmFzdPGlmq2tSv40ziSZ2j5eD/Ry9gPsPXoPdU/52vBwUln1KU3juFva8HBVbW46mvBwUWXCO3vh5anHidmMO3b4vVt/z9Vs4PCJUvVX3mhtJ3Cay+dd/ktkTfKXD7nnl81CLVIy7fO//rOBwlwe7hoC8l0FUqv8kTu4fj9NXKb/TM5TbSY35zuY1w5hcbOUmuGvmVZuiqkV9JoCvWP+H2Pd84dwHickP/PdA1jrB/MtwL1HzTuQDHGvfB7QHEI4NvWrtwzO17Sr7Yb5erBxAp37EkX+x+O/fbtfRjpH21exXH5vsa3N5AvAv4YpT6F2P6GpauZXAuWL2a+zzBsm+OOXtAy74cvYupvqV1RbHWuPo0lPmd2xNNc+Hsq2rW/2P3TUj4Xm2duw5xs532eUo4e6xpvk/B8znEiwFfTtJ8P4LnZ4gvZl+u58itzK0RY321nyPDa97YawpFfin/D1JDul5h+aX8P0iNUr1qyXFP9cqib643tQNjjtL5a8231Jva/9WA2nmRm6/F/XOtN9VSA3L1SstX6v4W1qvefYf1SrMfpFHvNftB3L7W+l8SvhEr+0GJ9XxA6lUrS/SNSO0HpY9Hzepr63jUrL62jkfNsflSs/r2TS++P4Zk9/A=
+   eJztmktOwzAQQFN3w9WKxAGABXCVIrHrBpD4XAlYAKfoLbAFlsJo/Ekyvzh50shS1aZ+HWcST9p1tBzc/2gFzKf/GvQe679z5aAg55OL3HvHsHfloMDKejx15aDAgmvg1pVDixOnE1M4urpYffPfb+X8gFD5UtVnbih958DqW/aNbnP0HQO375nDRy1iPeLyvXO/jv1REuweDvpSAl2l8hs9sXs4Tl+t/AbPVG4DLeY3ldsAZ36xkZPoSpHfJ9qpkdN31civJNAV659w+55vuu4CxOWG/nugaxhh/6S/Fyj5xnMBjiXuvdsDiEcG37h24Zja9+R8sd8uVQ8gUr5Dib7Y/Xbqt6vpx0j7avcqlub75t3eQXwI+GLk+hdD+hqWrmVwLli9mvo8wbJviil7QMu+HL2Lsb65dUWx1rj6NJT5ndoTjXPh7Ktq1v+l+0YkfK+2XXft42Y77vOUcPZY43yfveeLj1cDvpzE+X56zy8f38y+XM+Ra5laI4b6aj9Hhte8odcUivxS/h+khHS9wvJL+X+QErl6VZPjluqVRd9Ub2oHxhS589eab643tf+rAaXzIjVfi/vnUm+qpgak6pWWr9T9LaxXrfv265VmP0ij3mv2g7h9rfW/JHwDVvaDEuv5gNSrWuboG5DaD0ofj5rV19bxqFl9bR2PmqX5UrP6tk0rvj988fiH
   </data>
  </layer>
  <layer name="Objetos" width="60" height="60">
@@ -65,8 +65,8 @@
   </object>
  </objectgroup>
  <objectgroup name="entradascuevas">
-  <object id="37" name="mapacasa" x="472" y="260">
-   <polyline points="0,0 14.6667,-1.33333"/>
+  <object id="37" name="mapacueva" x="461.333" y="299.333">
+   <polyline points="0,0 22.6667,-5.33333"/>
   </object>
  </objectgroup>
  <objectgroup name="personas">
