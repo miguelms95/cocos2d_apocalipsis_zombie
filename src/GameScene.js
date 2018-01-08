@@ -279,11 +279,8 @@ var GameLayer = cc.Layer.extend({
                 disparo.body.p.y < 0) {
                     this.removeChild(disparo.sprite);
                     this.disparos.splice(i, 1);
-
-                    space.addPostStepCallback(function () {
-                        space.removeBody(disparo.body);
-                        space.removeShape(disparo.shape);
-                    });
+                    space.removeBody(disparo.body);
+                    space.removeShape(disparo.shape);
                 }
         }
     },
