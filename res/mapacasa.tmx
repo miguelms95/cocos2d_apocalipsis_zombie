@@ -5,12 +5,12 @@
  </tileset>
  <layer name="Terreno base" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJztw6ENAAAMAjDE/j8YxRsTbdJeUlVVVVV9evfrpt0=
+   eJytVbsOwkAMu4Glv8X//8vN3QAJRLD8SIAhAl2vSew47r6sdd5jP39Z7PJ8k1B38YzVYPnY+5N3sF+Wy+U8ls+j6rO4rndMuOnmd/NxGB4YazCMrI/z8okFcZ7kjsKpNOE06DhQszzWJ+4p1y88L0wMv9MrPqv9uF1T/DteEWuaZ1e7GAkn6myyt517iLFqebqrVbNX0ivDr3R8EG2o+XUw4nnFu6Fe4nk6Y4zKL+JF/tVOdLlReLFW4hvn6+aMwbBhXdyxbrA9Zl6MveD/zmydlypsiuPOLk932Pkk3lNzTz7qtKnyd/XVwcv0gn1Nv3/JexMu1PEvWJUvo7bVf+SFaZlpR+2tqqF8arKnDm/aKdaf212Fr/ahvBHPFF71XH2H0As6voF9M7wJa+c505PC+Y2+03yxfrde2l/HefLH5B/pfOJDimPmR4kT55k1R9Ip29cOVseP0tMvmnN7qHJgnx18aTYJq7rbxcrqJS26/pw2GQ/dfPhOmlWnh4nGUr6Uf6Jp5lvue/mvYP27GeFMbn03vvA=
   </data>
  </layer>
  <layer name="decorado" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYCAfGEPpe1C6kxG7upkspIkTkiMFUMscEMiB0uJQfx7C4d/hAkb9O2BOoQsY9S9x+iyZqOuO0zQwExsg179FVHTbPaCdLIykm3kSipHBKQJ6lkLpAKg/fw+C9JxNpBuYGCEYGTAPAvdjAzdYcWNPKta3gwXg828Tkf41Acal6SCNT3SAz7+7h2H80gLMZmZgmDMAeB7zwPj3CtDeqwOArw+Qf3mB+YBvALDAaP4bBaNgFBAJxAbaATQGAKW7V1k=
+   eJxjYCAfGEPpe1C6kxG7uhkspIkTkiMFUMscEMiB0uJQfx7C4d/hAkb9O2BOoQsY9S9x+iyZqOuOCTQwExsg179FVHTbPaCdhYykm3kSipHBKQJ6lkLpAKg/fw+C9JxNpBuYGCEYGTAPAvdjA/NYGRjm48ALWAfaddQH14F+uoED3yTSvybAuDQdpPGJDgTYGBgEcWAhtoF23dAAs5kZGOYMAJ7LPDD+vQK09+oA4GsD5F9eYL+CbwAwPxX7MyMdTB9hYRk36t9hDbD5V4z+zqAbAI3tAAAIU1Lu
   </data>
  </layer>
  <objectgroup name="puertassalidas">
