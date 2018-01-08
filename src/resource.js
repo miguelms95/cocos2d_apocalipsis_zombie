@@ -3,7 +3,7 @@ var res = {
     boton_jugar_png : "res/boton_jugar.png",
     menu_titulo_png : "res/menu_titulo.png",
     tiles16_png: "res/tiles16.png",
-    mapa1_tmx: "res/mapa2.tmx",
+    mapa1_tmx: "res/mapa1.tmx",
     mapa2_tmx: "res/mapa2.tmx",
     mapacasa_tmx: "res/mapacasa.tmx",
     caballero_png: "res/caballero.png",

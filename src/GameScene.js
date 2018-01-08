@@ -48,6 +48,7 @@ var GameLayer = cc.Layer.extend({
     yaEntradoEnCapa: false,
     ultimaPosicionCaballero: null,
     personas: [],
+    disparos: [],
 
     ctor: function (scene, nombreMapa, circuloVisionActivado = false) {
         this._super();
@@ -670,6 +671,7 @@ var GameLayer = cc.Layer.extend({
     },
     colisionDisparoConEnemigo: function (arbiter, space) {
         var shapes = arbiter.getShapes();
+        var shapeDisparo = shapes[0];
         var shapeEnemigo = shapes[1];
 
         var zombie = null;
@@ -683,8 +685,26 @@ var GameLayer = cc.Layer.extend({
             }
         }
 
-        this.removeChild(zombie.sprite);
-        this.zombies.splice(posZombie, 1);
+        if (zombie != null) {
+            this.removeChild(zombie.sprite);
+            this.zombies.splice(posZombie, 1);
+        }
+
+        var disparo = null;
+        var posDisparo = -1;
+
+        for (var i = 0; i < this.disparos.length; i++) {
+            if (this.disparos[i].shape === shapeDisparo) {
+                disparo = this.disparos[i];
+                posDisparo = i;
+                break;
+            }
+        }
+
+        if (disparo != null) {
+            this.removeChild(disparo.sprite);
+            this.disparos.splice(posDisparo, 1);
+        }
     }
 });
 
