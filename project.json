@@ -27,6 +27,7 @@
         "src/GameOverLayer.js",
         "src/Puerta.js",
         "src/BloqueDestruible.js",
-        "src/Persona.js"
+        "src/Persona.js",
+        "src/BotonDisparar.js"
     ]
 }
