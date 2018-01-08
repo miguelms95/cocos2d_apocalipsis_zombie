@@ -28,6 +28,7 @@
         "src/Puerta.js",
         "src/BloqueDestruible.js",
         "src/Persona.js",
-        "src/BotonDisparar.js"
+        "src/BotonDisparar.js",
+        "src/Disparo.js"
     ]
 }

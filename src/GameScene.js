@@ -12,6 +12,7 @@ var tipoEntradaCasa = 7;
 var tipoEntradaCueva = 8;
 var tipoPuertaSalida = 9;
 var tipoPersona = 10;
+var tipoDisparo = 11;
 
 var capas = {};
 var capaActual = null;
@@ -91,6 +92,9 @@ var GameLayer = cc.Layer.extend({
 
         this.space.addCollisionHandler(tipoJugador, tipoPersona,
             null, null, this.colisionJugadorConPersona.bind(this), null);
+
+        this.space.addCollisionHandler(tipoDisparo, tipoEnemigo,
+            null, null, this.colisionDisparoConEnemigo.bind(this), null);
 
         this.space.setDefaultCollisionHandler(
             null, null, this.colisionZombie.bind(this), null);
@@ -663,6 +667,24 @@ var GameLayer = cc.Layer.extend({
                 }
             }
         }
+    },
+    colisionDisparoConEnemigo: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+        var shapeEnemigo = shapes[1];
+
+        var zombie = null;
+        var posZombie = -1;
+
+        for (var i = 0; i < this.zombies.length; i++) {
+            if (this.zombies[i].shape === shapeEnemigo) {
+                zombie = this.zombies[i];
+                posZombie = i;
+                break;
+            }
+        }
+
+        this.removeChild(zombie.sprite);
+        this.zombies.splice(posZombie, 1);
     }
 });
 

@@ -36,7 +36,7 @@ var ControlesLayer = cc.Layer.extend({
         this.pad = new Pad(this);
         this.botonTurbo = new BotonTurbo(this);
         this.botonDisparar = new BotonDisparar(this);
-        
+
         // Registrar Mouse Events
         cc.eventManager.addListener({
             event: cc.EventListener.MOUSE,
@@ -66,6 +66,11 @@ var ControlesLayer = cc.Layer.extend({
                 gameLayer.caballero.cargasTurbo--;
                 instancia.actualizarCargasTurbo();
             }
+        }
+
+        var pulsadoDisparar = instancia.botonDisparar.pulsado(posicion);
+        if (pulsadoDisparar) {
+            gameLayer.caballero.disparar();
         }
     },
     procesarMouseUp: function (event) {

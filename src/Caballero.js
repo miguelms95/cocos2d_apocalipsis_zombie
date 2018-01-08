@@ -197,5 +197,8 @@ var Caballero = cc.Class.extend({
     },
     quieto: function() {
         return this.animacion === this.animacionQuieto;
+    },
+    disparar: function() {
+        new Disparo(this.space, cc.p(this.body.p.x, this.body.p.y), this.layer);
     }
 });

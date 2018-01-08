@@ -30,7 +30,8 @@ var res = {
     bloque_destruible_png: "res/caja_destruible.png",
     boton_reanudar_png: "res/boton_reanudar.png",
     persona_png: "res/persona.png",
-    boton_disparar_png: "res/boton_disparar.png"
+    boton_disparar_png: "res/boton_disparar.png",
+    disparo_png: "res/disparo.png"
 };
 
 var g_resources = [];
