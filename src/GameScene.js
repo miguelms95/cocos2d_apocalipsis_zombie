@@ -688,6 +688,8 @@ var GameLayer = cc.Layer.extend({
 
             if (disparo != null) {
                 this.removeChild(disparo.sprite);
+                this.space.removeShape(shapeDisparo);
+                this.space.removeBody(disparo.body);
                 this.disparos.splice(posDisparo, 1);
             }
         }
@@ -726,6 +728,8 @@ var GameLayer = cc.Layer.extend({
 
         if (disparo != null) {
             this.removeChild(disparo.sprite);
+            this.space.removeShape(shapeDisparo);
+            this.space.removeBody(disparo.body);
             this.disparos.splice(posDisparo, 1);
         }
     }
