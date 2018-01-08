@@ -199,6 +199,6 @@ var Caballero = cc.Class.extend({
         return this.animacion === this.animacionQuieto;
     },
     disparar: function() {
-        this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x, this.body.p.y), this.layer));
+        this.layer.disparos.push(new Disparo(this.space, cc.p(this.body.p.x + 20, this.body.p.y), this.layer));
     }
 });
