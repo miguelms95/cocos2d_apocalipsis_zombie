@@ -35,7 +35,8 @@ var res = {
     disparoUp_png: "res/disparoUp.png",
     disparoDo_png: "res/disparoDo.png",
     disparoRi_png: "res/disparoRi.png",
-    disparoLe_png: "res/disparoLe.png"
+    disparoLe_png: "res/disparoLe.png",
+    caja_teletransporte_png: "res/caja_teletransporte.png"
 };
 
 var g_resources = [];

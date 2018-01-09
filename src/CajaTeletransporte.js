@@ -1,5 +1,4 @@
-
-var CajaAturdimiento = cc.Class.extend({
+var CajaTeletransporte = cc.Class.extend({
     gameLayer: null,
     sprite: null,
     shape: null,
@@ -7,9 +6,10 @@ var CajaAturdimiento = cc.Class.extend({
         this.gameLayer = gameLayer;
 
         // Crear Sprite - Cuerpo y forma
-        this.sprite = new cc.PhysicsSprite(res.caja_aturdimiento_png);
+        this.sprite = new cc.PhysicsSprite(res.caja_teletransporte_png);
         this.sprite.setScaleX(0.5);
         this.sprite.setScaleY(0.5);
+
         // Cuerpo estática, no le afectan las fuerzas
         var body = new cp.StaticBody();
         body.setPos(posicion);
@@ -23,7 +23,7 @@ var CajaAturdimiento = cc.Class.extend({
 
         // Nunca genera colisiones reales, es como un “fantasma”
         this.shape.setSensor(false);
-        this.shape.setCollisionType(tipoCajaAturdimiento);
+        this.shape.setCollisionType(tipoCajaTeletransporte);
 
         // forma estática
         gameLayer.space.addStaticShape(this.shape);

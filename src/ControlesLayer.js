@@ -30,7 +30,7 @@ var ControlesLayer = cc.Layer.extend({
         // Contador de cargas
         this.etiquetaCargas = new cc.LabelTTF("Cargas de turbo: 0", "Helvetica", 20);
         this.etiquetaCargas.setPosition(cc.p(size.width - 90, size.height - 80));
-        this.etiquetaCargas.fillStyle = new cc.Color(0, 0, 0, 0);
+        this.etiquetaCargas.fillStyle = new cc.Color(255, 255, 255, 0);
         this.addChild(this.etiquetaCargas);
 
         this.pad = new Pad(this);

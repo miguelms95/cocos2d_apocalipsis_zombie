@@ -1,6 +1,6 @@
 var caballeroGlobal = null;
 
-var llavesNecesarias = 5;
+var llavesNecesarias = 10;
 var vidasJugador = 5;
 var tipoJugador = 1;
 var tipoLlave = 2;
@@ -15,6 +15,9 @@ var tipoPersona = 10;
 var tipoDisparo = 11;
 var tipoLimite = 12;
 var tipoPersona = 13;
+var tipoBloqueDestruible = 14;
+var tipoEntradaBunker = 15;
+var tipoCajaTeletransporte = 16;
 
 var capas = {};
 var capaActual = null;
@@ -51,7 +54,9 @@ var GameLayer = cc.Layer.extend({
     ultimaPosicionCaballero: null,
     personas: [],
     disparos: [],
-
+    puntosTeletransporte: [],
+    cajasTeletransporte: [],
+    
     ctor: function (scene, nombreMapa, circuloVisionActivado = false) {
         this._super();
         this.scene = scene;
@@ -101,6 +106,15 @@ var GameLayer = cc.Layer.extend({
 
         this.space.addCollisionHandler(tipoDisparo, tipoPersona,
             null, null, this.colisionDisparoConPersona.bind(this), null);
+
+        this.space.addCollisionHandler(tipoDisparo, tipoBloqueDestruible,
+            null, null, this.colisionDisparoConBloqueDestruible.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoEntradaBunker,
+            null, null, this.colisionJugadorConEntradaBunker.bind(this), null);
+
+        this.space.addCollisionHandler(tipoJugador, tipoCajaTeletransporte,
+            null, null, this.colisionJugadorConCajaTeletransporte.bind(this), null);
 
         this.space.setDefaultCollisionHandler(
             null, null, this.colisionZombie.bind(this), null);
@@ -240,6 +254,12 @@ var GameLayer = cc.Layer.extend({
                     this.cajasAturdimiento.splice(i, 1);
                 }
             }
+            for (var i = 0; i < this.cajasTeletransporte.length; i++) {
+                if (this.cajasTeletransporte[i].shape == shape) {
+                    this.cajasTeletransporte[i].eliminar();
+                    this.cajasTeletransporte.splice(i, 1);
+                }
+            }
         }
         this.formasEliminar = [];
 
@@ -369,6 +389,30 @@ var GameLayer = cc.Layer.extend({
             }
         }
 
+        var grupoCajasTeletransporte = this.mapa.getObjectGroup("cajasteletransporte");
+        if (grupoCajasTeletransporte != null) {
+            var cajaTeletransporteArray = grupoCajasTeletransporte.getObjects();
+
+            for (var i = 0; i < cajaTeletransporteArray.length; i++) {
+                var cajaTeletransporte = new CajaTeletransporte(this,
+                    cc.p(cajaTeletransporteArray[i]["x"], cajaTeletransporteArray[i]["y"]),
+                    cajaTeletransporteArray[i]["width"], cajaTeletransporteArray[i]["height"]);
+                this.cajasTeletransporte.push(cajaTeletransporte);
+            }
+        }
+
+        var grupoPuntosTeletransporte = this.mapa.getObjectGroup("puntosteletransporte");
+        if (grupoPuntosTeletransporte != null) {
+            var puntoTeletransporteArray = grupoPuntosTeletransporte.getObjects();
+
+            for (var i = 0; i < puntoTeletransporteArray.length; i++) {
+                this.puntosTeletransporte.push({ 
+                                        x: puntoTeletransporteArray[i]["x"],
+                                        y: puntoTeletransporteArray[i]["y"]
+                                                });
+            }
+        }
+
         var grupoBloquesDestruibles = this.mapa.getObjectGroup("bloques_destruibles");
         if (grupoBloquesDestruibles != null) {
             var bloquesDestruiblesArray = grupoBloquesDestruibles.getObjects();
@@ -471,6 +515,30 @@ var GameLayer = cc.Layer.extend({
             for (var i = 0; i < personasArray.length; i++) {
                 var persona = personasArray[i];
                 this.personas.push(new Persona(this, this.space, cc.p(persona["x"], persona["y"]), persona["name"]));
+            }
+        }
+
+        var grupoEntradaBunker = this.mapa.getObjectGroup("entradabunker");
+        if (grupoEntradaBunker != null) {
+            var entradaBunkerArray = grupoEntradaBunker.getObjects();
+            for (var i = 0; i < entradaBunkerArray.length; i++) {
+                var entradaBunker = entradaBunkerArray[i];
+                var puntos = entradaBunker.polylinePoints;
+                for (var j = 0; j < puntos.length - 1; j++) {
+                    var bodyEntradaBunker = new cp.StaticBody();
+
+                    var shapeEntradaBunker = new cp.SegmentShape(bodyEntradaBunker,
+                        cp.v(parseInt(entradaBunker.x) + parseInt(puntos[j].x),
+                            parseInt(entradaBunker.y) - parseInt(puntos[j].y)),
+                        cp.v(parseInt(entradaBunker.x) + parseInt(puntos[j + 1].x),
+                            parseInt(entradaBunker.y) - parseInt(puntos[j + 1].y)),
+                        1);
+
+                    shapeEntradaBunker.setFriction(1);
+                    shapeEntradaBunker.setElasticity(0);
+                    shapeEntradaBunker.setCollisionType(tipoEntradaBunker);
+                    this.space.addStaticShape(shapeEntradaBunker);
+                }
             }
         }
     },
@@ -602,6 +670,16 @@ var GameLayer = cc.Layer.extend({
         this.tiempoAturdimiento = 3;
         this.formasEliminar.push(shapes[1]);
     },
+    colisionJugadorConCajaTeletransporte: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+
+        var posTeletransporte = parseInt(Math.random() * this.puntosTeletransporte.length);
+        var puntoTeletransporte = this.puntosTeletransporte[posTeletransporte];
+
+        this.caballero.body.p.x = puntoTeletransporte.x;
+        this.caballero.body.p.y = puntoTeletransporte.y;
+        this.formasEliminar.push(shapes[1]);
+    },
     colisionJugadorConEntradaCasa: function (arbiter, space) {
         this.entrarEnCasaCueva(arbiter, space, this.entradasCasas, false);
     },
@@ -653,6 +731,11 @@ var GameLayer = cc.Layer.extend({
 
                 controlesLayer.mostrarDialogo(frasePersona, personaDaLlave);
             }
+        }
+    },
+    colisionJugadorConEntradaBunker: function (arbiter, space) {
+        if (this.caballero.llaves === llavesNecesarias) {
+            this.getParent().addChild(new GameOverLayer());
         }
     },
     entrarEnCasaCueva: function (arbiter, space, entradasArray, activarCirculoVision) {
@@ -759,6 +842,52 @@ var GameLayer = cc.Layer.extend({
         if (zombie != null) {
             this.removeChild(zombie.sprite);
             this.zombies.splice(posZombie, 1);
+        }
+
+        var disparo = null;
+        var posDisparo = -1;
+
+        for (var i = 0; i < this.disparos.length; i++) {
+            if (this.disparos[i].shape === shapeDisparo) {
+                disparo = this.disparos[i];
+                posDisparo = i;
+                break;
+            }
+        }
+
+        if (disparo != null) {
+            this.removeChild(disparo.sprite);
+            this.disparos.splice(posDisparo, 1);
+
+            space.addPostStepCallback(function () {
+                space.removeBody(disparo.body);
+                space.removeShape(shapeDisparo);
+            });
+        }
+    },
+    colisionDisparoConBloqueDestruible: function (arbiter, space) {
+        var shapes = arbiter.getShapes();
+        var shapeDisparo = shapes[0];
+        var shapeBloqueDestruible = shapes[1];
+
+        var posBloqueDestruible = -1;
+
+        for (var i = 0; i < this.bloquesDestruibles.length; i++) {
+            if (this.bloquesDestruibles[i].shape === shapeBloqueDestruible) {
+                posBloqueDestruible = i;
+                break;
+            }
+        }
+
+        if (posBloqueDestruible != -1) {
+            var bloqueDestruible = this.bloquesDestruibles[posBloqueDestruible];
+            this.removeChild(bloqueDestruible.sprite);
+
+            space.addPostStepCallback(function() {
+                space.removeShape(bloqueDestruible.shape);
+            });
+
+            this.bloquesDestruibles.splice(posBloqueDestruible, 1);
         }
 
         var disparo = null;

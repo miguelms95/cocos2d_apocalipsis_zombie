@@ -23,7 +23,7 @@ var BloqueDestruible = cc.Class.extend({
 
         // Nunca genera colisiones reales, es como un “fantasma”
         this.shape.setSensor(false);
-        this.shape.setCollisionType(tipoCajaAturdimiento);
+        this.shape.setCollisionType(tipoBloqueDestruible);
 
         // forma estática
         gameLayer.space.addStaticShape(this.shape);

@@ -29,6 +29,7 @@
         "src/BloqueDestruible.js",
         "src/Persona.js",
         "src/BotonDisparar.js",
-        "src/Disparo.js"
+        "src/Disparo.js",
+        "src/CajaTeletransporte.js"
     ]
 }
