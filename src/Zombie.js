@@ -40,7 +40,7 @@ var Zombie = cc.Class.extend({
             this.sprite.getContentSize().width,
             this.sprite.getContentSize().height);
 
-        this.shape.setFriction(1);
+        this.shape.setFriction(1); 
         this.shape.setElasticity(0);
         this.shape.setCollisionType(tipoEnemigo);
 
@@ -146,12 +146,12 @@ var Zombie = cc.Class.extend({
             this.sprite.runAction(this.animacion);
 
 
-        this.body.vx = 0;
-        this.body.vy = 0;
+        this.girar();
     }, girar: function() {
-        if (this.moverVertical)
+        if (this.moverVertical) {
             this.body.vy *= -1;
-        else
+        } else {
             this.body.vx *= -1;
+        }
     }
 });

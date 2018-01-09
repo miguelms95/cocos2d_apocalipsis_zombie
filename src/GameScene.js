@@ -807,11 +807,8 @@ var GameLayer = cc.Layer.extend({
     colisionZombie: function (arbiter, space) {
         var shapes = arbiter.getShapes();
         if (shapes[0].collision_type === tipoEnemigo) {
-            var x = shapes[0].body.p.x;
-            var y = shapes[0].body.p.y;
-
             for (var zombie of this.zombies) {
-                if (zombie.body.p.x === x && zombie.body.p.y === y) {
+                if (zombie.shape === shapes[0]) {
                     //zombie.girar();
                     break;
                 }
