@@ -56,9 +56,12 @@ var GameLayer = cc.Layer.extend({
     disparos: [],
     puntosTeletransporte: [],
     cajasTeletransporte: [],
-    
+    esCasaOCueva: false,
+    entregadaLlaveZombies: false,
+
     ctor: function (scene, nombreMapa, circuloVisionActivado = false) {
         this._super();
+        this.inicializar();
         this.scene = scene;
         var size = cc.winSize;
         this.tiempoVelocidad = -1;
@@ -151,6 +154,37 @@ var GameLayer = cc.Layer.extend({
 
         return true;
 
+    },
+    inicializar: function () {
+        this.orientacion =  0;
+        this.zombies =  [];
+        this.space =  null;
+        this.tecla =  0;
+        this.orientacionPad =  0;
+        this.tiempoInvulnerable =  0;
+        this.nombreMapa =  null;
+        this.mapa = null;
+        this.mapaAncho = 0;
+        this.mapaAlto = 0;
+        this.llaves = [];
+        this.cajasVida = [];
+        this.bloquesDestruibles = [];
+        this.formasEliminar = [];
+        this.cajasTurbo = [];
+        this.cajasAturdimiento = [];
+        this.tiempoVelocidad =  null;
+        this.tiempoAturdimiento = null;
+        this.entradasCasas = [];
+        this.entradasCuevas = [];
+        this.salidas = [];
+        this.capaACambiar = null;
+        this.activarCirculoVision = false;
+        this.personas = [],
+        this.disparos = [],
+        this.puntosTeletransporte = [],
+        this.cajasTeletransporte = [],
+        this.esCasaOCueva = false, 
+        this.entregadaLlaveZombies = false;
     },
     update: function (dt) {
         this.space.step(dt);
@@ -303,6 +337,17 @@ var GameLayer = cc.Layer.extend({
                     space.removeShape(disparo.shape);
                 }
         }
+
+        var esCasa = this.esCasaOCueva && !this.circuloVision.activado;
+
+        if (esCasa) {
+            if (this.zombies.length === 0 && !this.entregadaLlaveZombies) {
+                this.caballero.llaves++;
+                var capaControles = this.getParent().getChildByTag(idCapaControles);
+                capaControles.colorearLlave();
+                this.entregadaLlaveZombies = true;
+            }
+        }
     },
     cargarMapa: function () {
         this.mapa = new cc.TMXTiledMap(this.nombreMapa);
@@ -428,7 +473,7 @@ var GameLayer = cc.Layer.extend({
         var grupoZombies = this.mapa.getObjectGroup("zombies");
         if (grupoZombies != null) {
             var zombiesArray = grupoZombies.getObjects();
-
+      
             for (var i = 0; i < zombiesArray.length; i++) {
                 this.zombies.push(new Zombie(zombiesArray[i].name == "v", this.space, cc.p(zombiesArray[i]["x"], zombiesArray[i]["y"]), this));
             }
@@ -486,6 +531,7 @@ var GameLayer = cc.Layer.extend({
 
         var grupoPuertasSalidas = this.mapa.getObjectGroup("puertassalidas");
         if (grupoPuertasSalidas != null) {
+            this.esCasaOCueva = true;
             var puertasSalidasArray = grupoPuertasSalidas.getObjects();
             for (var i = 0; i < puertasSalidasArray.length; i++) {
                 var puertasalida = puertasSalidasArray[i];
@@ -919,7 +965,7 @@ var idCapaControles = 2;
 var GameScene = cc.Scene.extend({
     onEnter: function () {
         this._super();
-        var layer = new GameLayer(this, res.mapa2_tmx);
+        var layer = new GameLayer(this, res.mapa1_tmx);
         this.addChild(layer, 0, idCapaJuego);
 
         var controlesLayer = new ControlesLayer(this);
