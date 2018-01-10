@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="55" height="50" tilewidth="16" tileheight="16" nextobjectid="99">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="55" height="50" tilewidth="16" tileheight="16" nextobjectid="131">
  <tileset firstgid="1" name="tiles16" tilewidth="16" tileheight="16" spacing="1" tilecount="1767" columns="57">
   <image source="tiles16.png" width="968" height="526"/>
  </tileset>
@@ -8,6 +8,11 @@
    eJzt1rsJACAQRMEDwbas026tQDBQ/E0w6S0vu5oi6qNyAAAAAAAAAACjykS9e9rWtd12e/e+Nm2n7WvTdtq+tvvafvlLGlbWdWQ=
   </data>
  </layer>
+ <objectgroup name="entradascuevas">
+  <object id="130" name="mapacueva" x="629.333" y="216.667">
+   <polyline points="0,0 19.3333,0"/>
+  </object>
+ </objectgroup>
  <layer name="Suelo" width="55" height="50">
   <data encoding="base64" compression="zlib">
    eJztms1OFEEQx4feXUVfQC+EBDXxKgTURI3EGzcu3IzyAuxqgsbz3rhr5AEMoBc13tEXcAO+ghf1BVxPdGemY1Gpqp6e6WpYQiX/7Hw0XfWbqu7p7eV2pyjunEHdtRpYPTuDem6laU9s/08ZrSv79vZ6qigOFfTWxr8tKJUfFz9n28K9NhZiS2VS/FpsBy43jH5MOFsuO2ebTIthu9ijldP2u0XxtdK3rtw2hu0Cw5aT9a/lGVf6p8D2uMtzjQL+2po2GxZknZ7QvD3s0XJs/nhZme1Wr+Sat58LAV8S23elNVcuvTl/BySzGZO+T8602TDLmqHvazBrs2EW7j5sBzmXquMNc/x8UONZNGHrm9JXP/JZ180N5NytjnfM8fM9JTbnx/kI9R+qxzp2yc73Nzu0QvNhDJv7HnsD9D0deHdClo+27aeAPjdc03AMMWxS20VTjoFFJje/bNy/A/pTsVHjrS+MN202qk5hjDFsMN97aJzhzzZs8D3/RRgvflzAOl1ryEb1K403F1fbdYk/H6A6gfWRoiad+ZxvIF/OlpCPlDWJ52NYH7uJ2HzOd9AnPpYYYthGU3x94LkTz/+aNTlKwBZj+F02Z7+PXAvoeuLvR6dxLyjV2lKTbYZ5H3BtvHHrF7gPhEXtC2mywRi5tXDMOgzuJ2BR+wt12cbM8xo3WCc1WVc602Lj+g3tx6Q0t1cyX8nvmXhReyeTxMbF1qRNk3diLmvLNmL2j/D1tr9BXjalYv6Gi63uejKXLZtSqS1lfa0I8VH3fla+tdheCX2+j5wnhkJf8B7mpNjcz6fdhKKWc9Tz5n6b9m3hM3HXvChOju2e1f2EekCwUbng2Ki27pqX566TN022D0I9tv2fAvgMrlg/7zqlrgKfOfK2IowTyahapPpZtTyPTKnVzGxDYpzAuH2cPs/+HNaiNN62ANtWZjZvODY8jqi4cXuqr1nzn20WXM/JJs3vMC916nZ4wmyhcQZ5YF5wfnA/+NpJsME5m6onqh6x4TZUHZ+GmsTMlMWuY5xxbJtWLxLqJfB5BCGo9tk=
@@ -31,6 +36,25 @@
  <objectgroup name="cajasteletransporte">
   <object id="88" x="273" y="552"/>
  </objectgroup>
+ <objectgroup name="personas">
+  <object id="120" name="false;Hace un día espléndido" x="459" y="518"/>
+  <object id="121" name="true;Aquí tienes tu llave;Ya no tengo más llaves" x="272" y="96"/>
+ </objectgroup>
+ <objectgroup name="cajasaturdimiento">
+  <object id="122" x="15" y="411"/>
+  <object id="123" x="707" y="85"/>
+ </objectgroup>
+ <objectgroup name="entradascasas">
+  <object id="127" name="casa3" x="114" y="213.333">
+   <polyline points="0,0 10,0"/>
+  </object>
+  <object id="128" name="casa2" x="114.667" y="549.333">
+   <polyline points="0,0 12.6667,0.666667"/>
+  </object>
+  <object id="129" name="casa1" x="641.333" y="536.667">
+   <polyline points="0,0 12,-0.666667"/>
+  </object>
+ </objectgroup>
  <objectgroup name="puntosteletransporte">
   <object id="90" x="835" y="297"/>
   <object id="91" x="823" y="130"/>
@@ -41,6 +65,38 @@
   <object id="96" x="272" y="105"/>
   <object id="97" x="75" y="72"/>
   <object id="98" x="33" y="133"/>
+ </objectgroup>
+ <objectgroup name="cajasvida">
+  <object id="115" x="892" y="349"/>
+  <object id="116" x="254" y="567"/>
+  <object id="117" x="823" y="251"/>
+ </objectgroup>
+ <objectgroup name="cajasturbo">
+  <object id="118" x="438" y="655" width="14" height="7"/>
+  <object id="119" x="195" y="279"/>
+ </objectgroup>
+ <objectgroup name="zombies">
+  <object id="106" name="v" x="47" y="303"/>
+  <object id="107" name="v" x="276" y="193"/>
+  <object id="108" x="587" y="219"/>
+  <object id="109" x="737" y="373"/>
+  <object id="110" x="734" y="541"/>
+  <object id="111" name="v" x="294" y="312" width="26" height="23"/>
+  <object id="112" x="20" y="587" width="15" height="36"/>
+  <object id="113" x="540" y="553"/>
+ </objectgroup>
+ <objectgroup name="llaves">
+  <object id="114" x="305" y="382" width="9" height="17"/>
+  <object id="125" x="733" y="148"/>
+  <object id="126" x="827" y="507"/>
+ </objectgroup>
+ <objectgroup name="bloques_destruibles">
+  <object id="99" x="440" y="596"/>
+  <object id="101" x="461" y="596"/>
+  <object id="102" x="107" y="232"/>
+  <object id="103" x="130" y="232"/>
+  <object id="104" x="83" y="234"/>
+  <object id="105" x="154" y="234"/>
  </objectgroup>
  <objectgroup name="Limites">
   <object id="5" x="515" y="796">

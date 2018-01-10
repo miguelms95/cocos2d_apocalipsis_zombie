@@ -30,7 +30,8 @@ var Caballero = cc.Class.extend({
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite("#caballero_quieto_01.png");
-        this.sprite.setScale(0.5, 0.5);
+        this.sprite.setScaleX(0.4);
+        this.sprite.setScaleY(0.5);
         // Cuerpo dinamico, SI le afectan las fuerzas
         this.body = new cp.Body(5, Infinity);
 
@@ -42,7 +43,7 @@ var Caballero = cc.Class.extend({
         // Se añade el cuerpo al espacio
         this.space.addBody(this.body);
 
-        this.ancho = this.sprite.getContentSize().width * 0.5;
+        this.ancho = this.sprite.getContentSize().width * 0.4;
         this.alto = this.sprite.getContentSize().height * 0.5;
 
         // forma
@@ -118,6 +119,11 @@ var Caballero = cc.Class.extend({
         this.animacion = this.animacionQuieto;
         layer.addChild(this.sprite, 10);
 
+    },
+    inicializar: function() {
+        this.llaves = 0;
+        this.vidas = vidasJugador;
+        this.cargasTurbo = 0;
     },
     cambiarCapa: function (space, posicion, layer) {
         this.space.removeShape(this.shape);

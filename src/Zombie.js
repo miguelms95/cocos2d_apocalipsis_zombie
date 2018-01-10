@@ -31,14 +31,16 @@ var Zombie = cc.Class.extend({
             this.sprite = new cc.PhysicsSprite("#Zombi-Camina-1-D.png");
 
         this.sprite.setBody(this.body);
+        var factorEscalado = 0.5;
+        this.sprite.setScale(factorEscalado, factorEscalado);
 
         // Se añade el cuerpo al espacio
         this.space.addBody(this.body);
 
         // forma
         this.shape = new cp.BoxShape(this.body,
-            this.sprite.getContentSize().width,
-            this.sprite.getContentSize().height);
+            this.sprite.getContentSize().width * factorEscalado,
+            this.sprite.getContentSize().height * factorEscalado);
 
         this.shape.setFriction(1); 
         this.shape.setElasticity(0);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" nextobjectid="57">
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" nextobjectid="62">
  <tileset firstgid="1" name="tiles16" tilewidth="16" tileheight="16" spacing="1" tilecount="1767" columns="57">
   <image source="tiles16.png" width="968" height="526"/>
  </tileset>
@@ -14,13 +14,13 @@
   </data>
  </layer>
  <objectgroup name="puertassalidas">
-  <object id="56" name="mapa1" x="112" y="274.667">
+  <object id="56" name="mapa2" x="112" y="274.667">
    <polyline points="0,0 21.3333,0.666667 16.6667,10.6667 -4.66667,8 -0.666667,-0.666667"/>
   </object>
  </objectgroup>
  <objectgroup name="zombies">
   <object id="46" x="367.333" y="81.3333" width="16" height="16"/>
-  <object id="47" x="576" y="335.333" width="16" height="16"/>
+  <object id="47" name="v" x="576" y="335.333" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="cajasvida">
   <object id="49" x="174.667" y="208" width="17.3333" height="17.3333"/>
@@ -33,6 +33,9 @@
  </objectgroup>
  <objectgroup name="llaves">
   <object id="54" x="641.333" y="223.333" width="18" height="18"/>
+  <object id="58" x="575" y="13"/>
+  <object id="59" x="586" y="464"/>
+  <object id="60" x="790" y="85"/>
  </objectgroup>
  <layer name="Terreno sobre terreno" width="50" height="30">
   <data encoding="base64" compression="zlib">

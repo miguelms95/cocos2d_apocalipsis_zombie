@@ -8,21 +8,22 @@ var CajaAturdimiento = cc.Class.extend({
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite(res.caja_aturdimiento_png);
-        this.sprite.setScaleX(0.5);
-        this.sprite.setScaleY(0.5);
+        this.sprite.setScaleX(0.3);
+        this.sprite.setScaleY(0.3);
         // Cuerpo estática, no le afectan las fuerzas
+
         var body = new cp.StaticBody();
         body.setPos(posicion);
 
         this.sprite.setBody(body);
 
         // Los cuerpos estáticos nunca se añaden al Space
-        var radio = (this.sprite.getContentSize().width * 0.5) / 2;
+        var radio = (this.sprite.getContentSize().width * 0.3) / 2;
         // forma
         this.shape = new cp.CircleShape(body, radio, cp.vzero);
 
         // Nunca genera colisiones reales, es como un “fantasma”
-        this.shape.setSensor(false);
+        this.shape.setSensor(true);
         this.shape.setCollisionType(tipoCajaAturdimiento);
 
         // forma estática

@@ -22,15 +22,20 @@ var Llave = cc.Class.extend({
         var body = new cp.StaticBody();
         body.setPos(posicion);
 
+        var factorEscalado = 0.5;
+        this.sprite.setScale(factorEscalado, factorEscalado);
+
         this.sprite.setBody(body);
 
         // Los cuerpos estáticos nunca se añaden al Space
-        var radio = this.sprite.getContentSize().width / 2;
+        var radio = this.sprite.getContentSize().width * factorEscalado / 2;
         // forma
         this.shape = new cp.CircleShape(body, radio, cp.vzero);
 
+        
+
         // Nunca genera colisiones reales, es como un “fantasma”
-        this.shape.setSensor(false);
+        this.shape.setSensor(true);
         this.shape.setCollisionType(tipoLlave);
 
         // this.sprite.setScaleX(0.3);

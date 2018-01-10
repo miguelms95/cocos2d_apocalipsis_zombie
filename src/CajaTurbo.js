@@ -8,6 +8,7 @@ var CajaTurbo = cc.Class.extend({
 
         // Crear Sprite - Cuerpo y forma
         this.sprite = new cc.PhysicsSprite(res.caja_turbo_png);
+        this.sprite.setScale(0.5, 0.5);
         // Cuerpo estática, no le afectan las fuerzas
         var body = new cp.StaticBody();
         body.setPos(posicion);
@@ -15,12 +16,12 @@ var CajaTurbo = cc.Class.extend({
         this.sprite.setBody(body);
 
         // Los cuerpos estáticos nunca se añaden al Space
-        var radio = this.sprite.getContentSize().width / 2;
+        var radio = (this.sprite.getContentSize().width * 0.5) / 2;
         // forma
         this.shape = new cp.CircleShape(body, radio, cp.vzero);
 
         // Nunca genera colisiones reales, es como un “fantasma”
-        this.shape.setSensor(false);
+        this.shape.setSensor(true);
         this.shape.setCollisionType(tipoCajaTurbo);
 
         // forma estática

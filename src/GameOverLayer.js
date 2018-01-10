@@ -27,5 +27,6 @@ var GameOverLayer = cc.Layer.extend({
     pulsarReiniciar:function(sender) {
         // Volver a ejecutar la escena principal
         cc.director.runScene(new GameScene());
+        caballeroGlobal.inicializar();
     }
 });

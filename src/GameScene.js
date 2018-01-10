@@ -58,6 +58,7 @@ var GameLayer = cc.Layer.extend({
     cajasTeletransporte: [],
     esCasaOCueva: false,
     entregadaLlaveZombies: false,
+    hayZombies: false,
 
     ctor: function (scene, nombreMapa, circuloVisionActivado = false) {
         this._super();
@@ -78,19 +79,19 @@ var GameLayer = cc.Layer.extend({
         this.space = new cp.Space();
 
         this.space.addCollisionHandler(tipoJugador, tipoLlave,
-            null, null, this.colisionJugadorConLlave.bind(this), null);
+            this.colisionJugadorConLlave.bind(this), null, this.colisionJugadorConLlave.bind(this), null);
 
         this.space.addCollisionHandler(tipoJugador, tipoEnemigo,
             null, null, this.colisionJugadorConEnemigo.bind(this), null);
 
         this.space.addCollisionHandler(tipoJugador, tipoCajaVida,
-            null, null, this.colisionJugadorConCajaVida.bind(this), null);
+            this.colisionJugadorConCajaVida.bind(this), null, this.colisionJugadorConCajaVida.bind(this), null);
 
         this.space.addCollisionHandler(tipoJugador, tipoCajaTurbo,
-            null, null, this.colisionJugadorConCajaTurbo.bind(this), null);
+            this.colisionJugadorConCajaTurbo.bind(this), null, this.colisionJugadorConCajaTurbo.bind(this), null);
 
         this.space.addCollisionHandler(tipoJugador, tipoCajaAturdimiento,
-            null, null, this.colisionJugadorConCajaAturdimiento.bind(this), null);
+            this.colisionJugadorConCajaAturdimiento.bind(this), null, this.colisionJugadorConCajaAturdimiento.bind(this), null);
 
         this.space.addCollisionHandler(tipoJugador, tipoEntradaCasa,
             null, null, this.colisionJugadorConEntradaCasa.bind(this), null);
@@ -117,7 +118,7 @@ var GameLayer = cc.Layer.extend({
             null, null, this.colisionJugadorConEntradaBunker.bind(this), null);
 
         this.space.addCollisionHandler(tipoJugador, tipoCajaTeletransporte,
-            null, null, this.colisionJugadorConCajaTeletransporte.bind(this), null);
+            this.colisionJugadorConCajaTeletransporte.bind(this), null, this.colisionJugadorConCajaTeletransporte.bind(this), null);
 
         this.space.setDefaultCollisionHandler(
             null, null, this.colisionZombie.bind(this), null);
@@ -185,6 +186,7 @@ var GameLayer = cc.Layer.extend({
         this.cajasTeletransporte = [],
         this.esCasaOCueva = false, 
         this.entregadaLlaveZombies = false;
+        this.hayZombies = false;
     },
     update: function (dt) {
         this.space.step(dt);
@@ -248,6 +250,10 @@ var GameLayer = cc.Layer.extend({
         if (this.tecla === 83 || this.orientacionPad === PAD_ABAJO) {
             this.moverPersonajeAbajo(this.caballero);
             //this.capaACambiar = "mapa1_tmx";
+        }
+
+        if (this.tecla === 32) {
+            this.caballero.disparar();
         }
 
         // ninguna pulsada
@@ -341,7 +347,7 @@ var GameLayer = cc.Layer.extend({
         var esCasa = this.esCasaOCueva && !this.circuloVision.activado;
 
         if (esCasa) {
-            if (this.zombies.length === 0 && !this.entregadaLlaveZombies) {
+            if (this.hayZombies && this.zombies.length === 0 && !this.entregadaLlaveZombies) {
                 this.caballero.llaves++;
                 var capaControles = this.getParent().getChildByTag(idCapaControles);
                 capaControles.colorearLlave();
@@ -472,6 +478,7 @@ var GameLayer = cc.Layer.extend({
 
         var grupoZombies = this.mapa.getObjectGroup("zombies");
         if (grupoZombies != null) {
+            this.hayZombies = true;
             var zombiesArray = grupoZombies.getObjects();
       
             for (var i = 0; i < zombiesArray.length; i++) {
@@ -807,6 +814,11 @@ var GameLayer = cc.Layer.extend({
     colisionZombie: function (arbiter, space) {
         var shapes = arbiter.getShapes();
         if (shapes[0].collision_type === tipoEnemigo) {
+            if (shapes[1].collision_type === tipoLlave) {
+                alert("hola");
+                return false;
+                //arbiter.ignore();
+            }
             for (var zombie of this.zombies) {
                 if (zombie.shape === shapes[0]) {
                     //zombie.girar();
@@ -885,6 +897,11 @@ var GameLayer = cc.Layer.extend({
         if (zombie != null) {
             this.removeChild(zombie.sprite);
             this.zombies.splice(posZombie, 1);
+
+            space.addPostStepCallback(function () {
+                space.removeBody(zombie.body);
+                space.removeShape(shapeEnemigo);
+            });
         }
 
         var disparo = null;
@@ -962,7 +979,7 @@ var idCapaControles = 2;
 var GameScene = cc.Scene.extend({
     onEnter: function () {
         this._super();
-        var layer = new GameLayer(this, res.mapa1_tmx);
+        var layer = new GameLayer(this, res.mapa2_tmx);
         this.addChild(layer, 0, idCapaJuego);
 
         var controlesLayer = new ControlesLayer(this);
